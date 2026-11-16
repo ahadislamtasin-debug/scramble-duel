@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Scramble Duel</title>
+<meta name="description" content="Unscramble the word from its meaning. Play with up to 6 friends — just share the link.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f4ef;--card:#ffffff;--ink:#1d2a2e;--mut:#5f7075;--line:#e2ded4;--me:#0b7f81;--me-bg:#dcf2f1;--fr:#d9621a;--fr-bg:#fde9d9;--tile:#fbf5e4;--tile-edge:#d8c9a0;--tile-ink:#2b2415;--bad:#c0392b;--ok:#1c7a46;
+--c0:#d9621a;--c0b:#fde9d9;--c1:#7b4fd6;--c1b:#ece5fb;--c2:#c2367a;--c2b:#fbe3ee;--c3:#2f6fd1;--c3b:#e2ecfb;--c4:#8a6d0f;--c4b:#f6efd2;--c5:#3d8b3d;--c5b:#e2f2e2;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#12181a;--card:#1b2326;--ink:#eef2f2;--mut:#9aa9ad;--line:#2c373b;--me:#3cc2c4;--me-bg:#17393a;--fr:#f39a5b;--fr-bg:#43291a;--tile-edge:#b9a878;--bad:#ff7b6b;--ok:#5ed08f;
+--c0:#f39a5b;--c0b:#43291a;--c1:#b39cf5;--c1b:#2e2548;--c2:#f08bb8;--c2b:#46202f;--c3:#7fb0f5;--c3b:#1d2c46;--c4:#e0c35a;--c4b:#3a3218;--c5:#7fd07f;--c5b:#1d3a1d}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#12181a;--card:#1b2326;--ink:#eef2f2;--mut:#9aa9ad;--line:#2c373b;--me:#3cc2c4;--me-bg:#17393a;--fr:#f39a5b;--fr-bg:#43291a;--tile-edge:#b9a878;--bad:#ff7b6b;--ok:#5ed08f;
+--c0:#f39a5b;--c0b:#43291a;--c1:#b39cf5;--c1b:#2e2548;--c2:#f08bb8;--c2b:#46202f;--c3:#7fb0f5;--c3b:#1d2c46;--c4:#e0c35a;--c4b:#3a3218;--c5:#7fd07f;--c5b:#1d3a1d}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.45 "DM Sans",system-ui,sans-serif;overflow-x:hidden}
+main{max-width:460px;margin:0 auto;padding:20px 16px 40px}
+h1,h2,.big{font-family:"Bricolage Grotesque","DM Sans",sans-serif;margin:0}
+h1{font-size:2.3rem;font-weight:800;letter-spacing:-.02em}
+.sub{color:var(--mut);margin:.25rem 0 1.4rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px}
+label{display:block;font-weight:700;font-size:.85rem;margin:0 0 6px}
+input{width:100%;font:inherit;padding:12px 14px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink)}
+input#cd{text-transform:uppercase;letter-spacing:.2em;font-weight:700}
+.row{display:flex;gap:8px}.row>*{flex:1}.row>input{flex:2}
+button{font:700 1rem "DM Sans",sans-serif;border:0;border-radius:12px;padding:13px 16px;cursor:pointer;background:var(--me);color:#fff;width:100%}
+button.sec{background:transparent;color:var(--ink);border:2px solid var(--line)}
+button.fr{background:var(--fr)}
+button:disabled{opacity:.45;cursor:not-allowed}
+button[aria-pressed="true"]{outline:3px solid var(--me);outline-offset:2px}
+:focus-visible{outline:3px solid var(--fr);outline-offset:2px}
+.gap>*+*{margin-top:10px}
+.or{text-align:center;color:var(--mut);font-size:.85rem;margin:14px 0}
+.msg{color:var(--bad);font-weight:500;min-height:1.4em;margin:8px 0 0}
+.note{color:var(--mut);font-size:.88rem}
+.invite{background:var(--me-bg);border:2px solid var(--me);border-radius:14px;padding:12px;margin-bottom:12px;font-weight:500}
+.big{font-size:3rem;font-weight:800;letter-spacing:.14em;text-align:center;color:var(--me)}
+.link{font-size:.82rem;word-break:break-all;color:var(--mut);text-align:center;user-select:all}
+/* player colours: .me is always teal for the viewer, others get their own slot colour */
+.me{--pc:var(--me);--pcb:var(--me-bg)}
+.p0{--pc:var(--c0);--pcb:var(--c0b)}.p1{--pc:var(--c1);--pcb:var(--c1b)}.p2{--pc:var(--c2);--pcb:var(--c2b)}
+.p3{--pc:var(--c3);--pcb:var(--c3b)}.p4{--pc:var(--c4);--pcb:var(--c4b)}.p5{--pc:var(--c5);--pcb:var(--c5b)}
+.slot{display:flex;align-items:center;gap:10px;padding:12px;border-radius:12px;border:2px solid var(--line);margin-top:8px}
+.slot[class*=" p"],.slot.me{border-color:var(--pc);background:var(--pcb)}
+.slot b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--pc,var(--mut));flex:none}
+.away{opacity:.5}
+.scores{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:8px;margin-bottom:12px}
+.sc{border-radius:14px;padding:10px 12px;border:2px solid var(--pc);background:var(--pcb);min-width:0}
+.sc b{display:block;font:800 1.9rem "Bricolage Grotesque",sans-serif;line-height:1}
+.sc span{display:block;font-size:.8rem;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.meta{display:flex;justify-content:space-between;font-weight:700;font-size:.9rem;margin-bottom:6px}
+.bar{height:10px;border-radius:99px;background:var(--line);overflow:hidden;margin-bottom:12px}
+.bar i{display:block;height:100%;width:100%;background:var(--me);border-radius:99px}
+.clue{font:600 1.25rem/1.35 "Bricolage Grotesque",sans-serif}
+.slots,.tiles{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:14px 0}
+.box{width:38px;height:46px;border-radius:10px;border:2px dashed var(--line);display:grid;place-items:center;font:800 1.3rem "Bricolage Grotesque",sans-serif;color:var(--me)}
+.box.on{border-style:solid;border-color:var(--me);background:var(--me-bg)}
+.tile{width:46px;height:52px;padding:0;border-radius:11px;background:var(--tile);color:var(--tile-ink);font:800 1.4rem "Bricolage Grotesque",sans-serif;box-shadow:0 4px 0 var(--tile-edge);border:1px solid var(--tile-edge)}
+.tile:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 var(--tile-edge)}
+.tile:disabled{opacity:.3;box-shadow:none}
+.fb{min-height:1.5em;text-align:center;font-weight:700}.fb.bad{color:var(--bad)}.fb.ok{color:var(--ok)}
+.shake{animation:sh .4s}@keyframes sh{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+.banner{text-align:center}.banner h2{font-size:1.7rem;color:var(--pc,var(--ink))}.banner .w{font:800 2rem "Bricolage Grotesque",sans-serif;letter-spacing:.1em;color:var(--me);margin:.4rem 0}
+.over{background:var(--fr-bg);border:2px solid var(--fr);border-radius:14px;padding:12px;margin-bottom:12px;font-weight:500}
+ul.rec{list-style:none;padding:0;margin:0}ul.rec li{display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+ol.rank{padding:0;margin:0;list-style:none}ol.rank li{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+ol.rank li b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ol.rank .pts{font:800 1.3rem "Bricolage Grotesque",sans-serif}
+.tag{font-weight:700;color:var(--pc,var(--mut))}
+.row2{display:flex;gap:8px;justify-content:center}.row2 button{width:auto;flex:1}
+.status{display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--mut);margin:0 0 10px}
+.status i{width:8px;height:8px;border-radius:50%;background:var(--ok)}.status.off i{background:var(--bad)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script type="text/plain" id="words">
+abundant|Present in large quantity; plentiful
+accurate|Correct in every detail
+adamant|Refusing to change your mind
+adept|Very skilled at something
+alleviate|To make pain or a problem less severe
+ambiguous|Open to more than one meaning
+amiable|Friendly and pleasant
+ample|More than enough
+anecdote|A short, amusing story about a real event
+apathy|Lack of interest or concern
+arduous|Difficult and tiring
+astute|Quick to see how to gain an advantage
+audacious|Boldly daring
+benevolent|Kind and generous
+bewilder|To confuse completely
+blunder|A careless, stupid mistake
+brevity|Shortness of expression
+candid|Honest and straightforward
+capricious|Changing mood or behavior suddenly
+caution|Care taken to avoid danger
+cherish|To protect and hold dear
+cluster|A small group close together
+coherent|Logical and easy to follow
+commence|To begin
+compassion|Sympathy for another’s suffering
+complex|Made of many connected parts
+concise|Giving much information in few words
+conceal|To hide from view
+consent|Permission or agreement
+contempt|A feeling that someone is worthless
+cunning|Clever at getting what you want, often by deceit
+debate|A formal discussion of opposing views
+decline|To become smaller or weaker
+deceive|To make someone believe something false
+defiant|Boldly resisting authority
+diligent|Careful and hard-working
+diminish|To make or become smaller
+discreet|Careful not to attract attention or reveal secrets
+dismay|Sudden worry or disappointment
+diverse|Showing a great deal of variety
+dormant|Temporarily inactive, as if asleep
+eager|Wanting very much to do something
+elaborate|Detailed and carefully worked out
+eloquent|Fluent and persuasive in speech
+elusive|Hard to find, catch or remember
+embark|To begin a journey or project
+endure|To suffer patiently through hardship
+enigma|A person or thing that is mysterious
+ephemeral|Lasting a very short time
+essence|The most important quality of something
+exhaust|To use up completely; to tire out
+fabricate|To invent or make up, often to deceive
+fathom|To understand after much thought
+feeble|Lacking strength
+fervent|Showing intense, sincere feeling
+fickle|Changing often, especially in loyalty
+flourish|To grow or develop successfully
+fragile|Easily broken or damaged
+frugal|Careful with money; not wasteful
+futile|Pointless because it cannot succeed
+gallant|Brave and honorable
+generous|Willing to give more than is expected
+gratitude|The quality of being thankful
+gregarious|Fond of company; sociable
+hamper|To hinder or get in the way of
+haughty|Arrogantly proud
+hinder|To create difficulties for
+hostile|Unfriendly and aggressive
+humble|Not proud; modest
+hypothesis|A proposed explanation to be tested
+idle|Not working or in use
+immense|Extremely large
+impartial|Treating all sides equally
+impulse|A sudden urge to act
+inevitable|Certain to happen
+inquire|To ask for information
+integrity|Being honest and having strong principles
+intricate|Very detailed and complicated
+jovial|Cheerful and friendly
+keen|Eager; sharp and strong
+lenient|More merciful than expected
+lethargic|Sluggish and without energy
+loyal|Faithful to a person or cause
+lucid|Clear and easy to understand
+meager|Small in quantity and poor in quality
+meticulous|Showing great attention to detail
+mimic|To copy the actions or speech of
+mundane|Dull and ordinary
+mystify|To puzzle or bewilder
+naive|Lacking experience or judgment
+negligent|Failing to take proper care
+nimble|Quick and light in movement
+nostalgia|Wistful longing for the past
+obscure|Not well known; hard to see or understand
+obstinate|Stubbornly refusing to change
+opulent|Rich and luxurious
+oppress|To keep in unfair, harsh subjection
+pacify|To calm someone who is angry
+persist|To continue despite difficulty
+pensive|Deep in serious thought
+plausible|Seeming reasonable or likely
+pragmatic|Dealing with things sensibly and realistically
+precise|Exact and accurate
+prosper|To succeed, especially financially
+prudent|Acting with care for the future
+quaint|Attractively old-fashioned
+quarrel|An angry argument
+radiant|Sending out bright light or joy
+rampant|Spreading in an uncontrolled way
+rational|Based on reason and logic
+reluctant|Unwilling and hesitant
+resilient|Able to recover quickly from difficulty
+reverence|Deep respect
+rigid|Stiff; not able to be bent or changed
+robust|Strong and healthy
+scarce|Not enough to meet demand
+scrutinize|To examine very closely
+serene|Calm, peaceful and untroubled
+shrewd|Having sharp judgment, especially in business
+skeptical|Doubtful about whether something is true
+solitary|Done or living alone
+sporadic|Happening at irregular intervals
+stagnant|Not flowing or developing
+stoic|Enduring pain without complaint
+subtle|So delicate it is hard to notice
+sufficient|Enough for a purpose
+superfluous|More than is needed
+tangible|Able to be touched; real
+tedious|Too long and boring
+tenacious|Holding firmly to a goal
+thrive|To grow and do well
+timid|Showing a lack of courage
+tranquil|Free from disturbance; calm
+trivial|Of little value or importance
+ubiquitous|Found everywhere
+unanimous|Agreed on by everyone
+vague|Not clearly expressed
+valiant|Showing courage
+verbose|Using more words than needed
+vibrant|Full of energy and color
+vigilant|Watching carefully for danger
+vivid|Producing strong, clear images
+volatile|Likely to change suddenly
+wary|Cautious about possible danger
+wholesome|Good for health or moral well-being
+wistful|Quietly sad with longing
+zealous|Full of energy for a cause
+</script>
+<script>
+(()=>{
+const RAW=document.getElementById('words').textContent;
+const BANK=RAW.trim().split('\n').map(l=>{const i=l.indexOf('|');return{w:l.slice(0,i).toUpperCase(),m:l.slice(i+1)}});
+const N=BANK.length,ROUND_MS=45000,RESULT_MS=3000,ALPHA='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',MAXP=6;
+/* ---------- live connection: free public MQTT relays, no accounts ---------- */
+const APP='scrambleduel-mp1';
+const BROKERS=['wss://broker.emqx.io:8084/mqtt','wss://broker.hivemq.com:8884/mqtt','wss://test.mosquitto.org:8081/mqtt'];
+const LIBS=['https://cdnjs.cloudflare.com/ajax/libs/mqtt/5.10.1/mqtt.min.js','https://cdn.jsdelivr.net/npm/mqtt@5.10.1/dist/mqtt.min.js','https://unpkg.com/mqtt@5.10.1/dist/mqtt.min.js'];
+const ID_RE=/^[a-z0-9]{6,16}$/;
+const app=document.getElementById('app');
+const store=(o)=>({get(k){try{return JSON.parse(o.getItem(k))}catch(e){return null}},set(k,v){try{o.setItem(k,JSON.stringify(v))}catch(e){}},del(k){try{o.removeItem(k)}catch(e){}}});
+let SS,LS;try{SS=store(sessionStorage);LS=store(localStorage)}catch(e){SS=LS={get(){return null},set(){},del(){}}}
+function rid(n){const a='abcdefghijkmnpqrstuvwxyz23456789';let s='';const r=crypto.getRandomValues(new Uint8Array(n));for(const x of r)s+=a[x%a.length];return s}
+const ME=(()=>{const v=SS.get('sd_id');if(typeof v==='string'&&ID_RE.test(v))return v;const n=rid(10);SS.set('sd_id',n);return n})();
+
+let lib=null,libState='loading',net=null,netUp=false;
+let solo=false,isHost=false,S=null,screen='home',myName=(typeof LS.get('sd_name')==='string'?LS.get('sd_name'):''),code='',homeMsg='';
+let picks=[],tiles=[],lastKey='',deadline=0,locked=false,fb='',fbc='';
+let hostGone=false,lastStateAt=0,lastRenderKey='',joinT=null,loopT=null;
+/* host-only */
+let lastSeen={},endsAt=0,pausedLeft=0,gt=null,lastPub=0;
+const params=new URLSearchParams(location.search);
+let inviteCode=((params.get('join')||location.hash.slice(1)||'').toUpperCase().replace(/[^A-Z0-9]/g,'')).slice(0,5);
+if(inviteCode.length!==5)inviteCode='';
+
+function hash(s){let h=1779033703^s.length;for(let i=0;i<s.length;i++){h=Math.imul(h^s.charCodeAt(i),3432918353);h=h<<13|h>>>19}return h>>>0}
+function rng(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function shuf(arr,r){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function clean(s){return typeof s==='string'?s.replace(/[\u0000-\u001f\u007f<>&"]/g,'').trim().slice(0,14):''}
+function h(t,a,...c){const e=document.createElement(t);for(const k in a||{}){const v=a[k];if(k==='class')e.className=v;else if(k.slice(0,2)==='on')e.addEventListener(k.slice(2),v);else if(v===true)e.setAttribute(k,'');else if(v!==false&&v!=null)e.setAttribute(k,v)}for(const x of c.flat())if(x!=null&&x!==false)e.append(x.nodeType?x:document.createTextNode(x));return e}
+function show(...n){app.replaceChildren(...n.filter(x=>x!=null&&x!==false))}
+let ordSeed='',ord=[];
+function wordIdx(r){if(ordSeed!==S.seed){ordSeed=S.seed;ord=shuf([...Array(N).keys()],rng(hash(S.seed)))}return ord[(S.off+r)%N]}
+/* every player gets their own letter order: distinct permutations from the round seed, picked by colour slot */
+function scrFor(word,slot){
+ const r=rng(hash(S.seed+':'+(S.off+S.round)));const seen=new Set([word]);const list=[];let t=0;
+ while(list.length<=slot&&t<500){t++;const a=shuf(word.split(''),r).join('');if(!seen.has(a)){seen.add(a);list.push(a)}}
+ return (list[slot]||list[list.length-1]||word.split('').reverse().join('')).split('');
+}
+const meP=()=>S&&S.players.find(p=>p.id===ME);
+const pById=id=>S&&S.players.find(p=>p.id===id);
+const cls=p=>p&&p.id===ME?'me':(p?'p'+p.c:'');
+const nameOf=id=>{const p=pById(id);return p?p.name:'Someone'};
+const onlineCount=()=>S.players.filter(p=>p.on).length;
+
+/* ---------- network layer ---------- */
+function loadLib(i){
+ if(i>=LIBS.length){libState='fail';refreshHome();return}
+ const s=document.createElement('script');s.src=LIBS[i];s.async=true;
+ s.onload=()=>{if(window.mqtt&&typeof mqtt.connect==='function'){lib=mqtt;libState='ok';refreshHome();afterLib()}else loadLib(i+1)};
+ s.onerror=()=>{s.remove();loadLib(i+1)};
+ document.head.appendChild(s);
+}
+function netOpen(c,will){
+ const T=APP+'/'+c;
+ const n={T,clients:[],seen:new Set(),q:[],closed:false};
+ n.mark=i=>{n.seen.add(i);n.q.push(i);if(n.q.length>800)n.seen.delete(n.q.shift())};
+ n.pub=(sub,t,d,retain)=>{const env={i:rid(10),f:ME,t,d};n.mark(env.i);const s=JSON.stringify(env);for(const cl of n.clients)if(cl.connected){try{cl.publish(T+'/'+sub,s,{qos:0,retain:!!retain})}catch(e){}}};
+ n.clearState=()=>{for(const cl of n.clients)if(cl.connected){try{cl.publish(T+'/s','',{qos:0,retain:true})}catch(e){}}};
+ net=n;netUp=false;
+ return new Promise(res=>{
+  let done=false;const fin=v=>{if(!done){done=true;res(v)}};
+  setTimeout(()=>fin(n.clients.some(x=>x.connected)?n:null),12000);
+  for(const url of BROKERS){
+   let cl;
+   try{cl=lib.connect(url,{clientId:'sd_'+ME+'_'+rid(4),clean:true,keepalive:20,reconnectPeriod:3000,connectTimeout:10000,will})}catch(e){continue}
+   n.clients.push(cl);
+   cl.on('connect',()=>{if(n.closed){cl.end(true);return}cl.subscribe([T+'/s',T+'/u',T+'/d'],{qos:0},()=>{});netStatus();if(net===n&&done)onReconnect();fin(n)});
+   cl.on('message',(topic,buf)=>onRaw(n,topic,buf));
+   cl.on('close',()=>netStatus());
+   cl.on('offline',()=>netStatus());
+   cl.on('error',()=>{});
+  }
+ });
+}
+function netClose(n,graceful){if(!n)return;n.closed=true;for(const cl of n.clients){try{cl.end(!graceful)}catch(e){}}}
+function netStatus(){
+ const up=!!(net&&net.clients.some(x=>x.connected));
+ if(up!==netUp){netUp=up;const el=document.getElementById('netst');if(el){el.className='status'+(up?'':' off');el.lastChild.textContent=up?' Connected':' Reconnecting…'}}
+}
+function onReconnect(){if(solo||!S&&isHost)return;if(isHost)bcast(true);else sendHello()}
+function onRaw(n,topic,buf){
+ if(n!==net||n.closed)return;
+ const sub=topic.slice(n.T.length+1);
+ let txt;try{txt=typeof buf==='string'?buf:buf.toString()}catch(e){return}
+ if(!txt||txt.length>30000)return;
+ let env;try{env=JSON.parse(txt)}catch(e){return}
+ if(!env||typeof env!=='object'||typeof env.t!=='string'||typeof env.f!=='string'||!ID_RE.test(env.f))return;
+ if(env.i!=null){if(typeof env.i!=='string'||env.i.length>20||n.seen.has(env.i))return;n.mark(env.i)}
+ if(env.f===ME)return;
+ if(sub==='s'&&env.t==='state'){if(!isHost)onState(env)}
+ else if(sub==='u'){if(isHost&&S)onUp(env)}
+ else if(sub==='d'){if(!isHost)onDown(env)}
+}
+
+/* ---------- referee (host) ---------- */
+function snapshot(){
+ const now=Date.now();
+ S.left=S.phase==='play'?(S.paused?pausedLeft:Math.max(0,endsAt-now)):(S.phase==='result'?(S.paused?pausedLeft:Math.max(0,endsAt-now)):0);
+ S.left=Math.min(S.left,ROUND_MS);
+}
+function bcast(silent){
+ if(!S)return;
+ S.seq++;snapshot();
+ if(net&&!solo){net.pub('s','state',S,true);lastPub=Date.now();SS.set('sd_host',{code,S,t:Date.now()})}
+ if(!silent)render();
+}
+function arm(ms,fn){clearTimeout(gt);endsAt=Date.now()+ms;gt=setTimeout(fn,ms)}
+function startRound(){S.phase='play';S.result=null;S.rs++;arm(ROUND_MS,()=>finish('n'));deadline=endsAt;bcast()}
+function finish(who){
+ if(!S||S.phase!=='play'||S.paused)return;
+ S.phase='result';S.result=who;const p=pById(who);if(p)p.score++;
+ S.log.push([wordIdx(S.round),who]);arm(RESULT_MS,next);bcast();
+}
+function next(){if(!S)return;if(S.round+1>=S.total){S.phase='final';clearTimeout(gt);bcast()}else{S.round++;startRound()}}
+function startGame(again){
+ if(again)S.off+=S.total;
+ S.players=S.players.filter(p=>p.on);S.players.forEach(p=>p.score=0);
+ S.round=0;S.log=[];S.paused=false;startRound();
+}
+function pause(){if(S.paused)return;pausedLeft=Math.max(0,endsAt-Date.now());S.paused=true;clearTimeout(gt)}
+function resume(){
+ if(!S.paused)return;S.paused=false;
+ if(S.phase==='play'){arm(Math.max(pausedLeft,10000),()=>finish('n'));deadline=endsAt}
+ else if(S.phase==='result')arm(RESULT_MS,next);
+}
+function checkPause(){
+ if(solo||!S)return;
+ if(S.phase==='play'||S.phase==='result'){const n=onlineCount();if(n<2)pause();else resume()}
+}
+function freeSlot(){const used=new Set(S.players.map(p=>p.c));for(let i=0;i<MAXP;i++)if(!used.has(i))return i;return 0}
+function dropPlayer(p){
+ if(p.id===ME)return;
+ if(S.phase==='lobby')S.players=S.players.filter(x=>x!==p);else p.on=false;
+ checkPause();bcast();
+}
+function onUp(env){
+ const id=env.f,d=env.d&&typeof env.d==='object'?env.d:{},now=Date.now();
+ let p=pById(id);
+ if(env.t==='hello'){
+  const name=clean(d.name)||'Friend';
+  if(p){p.name=name;p.on=true;lastSeen[id]=now}
+  else{
+   if(S.players.length>=MAXP){net.pub('d','full',{to:id});return}
+   p={id,name,score:0,on:true,c:freeSlot()};S.players.push(p);lastSeen[id]=now;
+  }
+  checkPause();bcast();return;
+ }
+ if(!p)return;
+ if(env.t==='bye'){dropPlayer(p);return}
+ lastSeen[id]=now;
+ if(!p.on){p.on=true;checkPause();bcast()}
+ if(env.t==='solve'){
+  if(S.phase!=='play'||S.paused||d.round!==S.round||d.rs!==S.rs)return;
+  finish(id);
+ }
+}
+function hostLoop(){
+ if(!S||!isHost||solo)return;
+ const now=Date.now();let changed=false;
+ for(const p of S.players.slice()){
+  if(p.id===ME||!p.on)continue;
+  if(!lastSeen[p.id])lastSeen[p.id]=now;
+  if(now-lastSeen[p.id]>12000){if(S.phase==='lobby')S.players=S.players.filter(x=>x!==p);else p.on=false;changed=true}
+ }
+ if(changed){checkPause();bcast()}
+ else if(now-lastPub>3000)bcast(true);
+}
+
+/* ---------- player (non-host) ---------- */
+function sendHello(){if(net)net.pub('u','hello',{name:myName})}
+function okState(d){
+ if(!d||typeof d!=='object')return null;
+ const I=(v,a,b)=>Number.isInteger(v)&&v>=a&&v<=b;
+ if(d.v!==2||d.code!==code||typeof d.host!=='string'||!ID_RE.test(d.host))return null;
+ if(typeof d.seed!=='string'||!/^[a-z0-9]{1,12}$/.test(d.seed))return null;
+ if(!I(d.off,0,100000)||![10,15,20].includes(d.total)||!I(d.round,0,d.total-1)||!I(d.rs,0,1e6)||!I(d.seq,0,1e9)||!I(d.left,0,ROUND_MS)||!['lobby','play','result','final'].includes(d.phase))return null;
+ if(!Array.isArray(d.players)||d.players.length<1||d.players.length>MAXP)return null;
+ const players=[],ids=new Set();
+ for(const p of d.players){
+  if(!p||typeof p!=='object'||typeof p.id!=='string'||!ID_RE.test(p.id)||ids.has(p.id)||!I(p.score,0,20)||!I(p.c,0,MAXP-1))return null;
+  ids.add(p.id);players.push({id:p.id,name:clean(p.name)||'Player',score:p.score,on:p.on===true,c:p.c});
+ }
+ if(!Array.isArray(d.log)||d.log.length>20)return null;
+ const log=[];for(const e of d.log){if(!Array.isArray(e)||!I(e[0],0,N-1)||typeof e[1]!=='string'||!(e[1]==='n'||ids.has(e[1])||ID_RE.test(e[1])))return null;log.push([e[0],e[1]])}
+ const result=d.result==='n'||(typeof d.result==='string'&&ID_RE.test(d.result))?d.result:null;
+ return{v:2,code:d.code,host:d.host,seed:d.seed,off:d.off,total:d.total,round:d.round,rs:d.rs,seq:d.seq,left:d.left,phase:d.phase,paused:d.paused===true,players,result,log};
+}
+function onState(env){
+ const s=okState(env.d);if(!s||s.host!==env.f)return;
+ if(S&&S.host===s.host&&s.seq<=S.seq)return;
+ lastStateAt=Date.now();
+ const wasGone=hostGone;hostGone=false;
+ if(!s.players.some(p=>p.id===ME)){
+  // not (or no longer) on the list: ask to be let in
+  if(!S||S.players.some(p=>p.id===ME))sendHello();
+  if(S&&S.host===s.host){S=s;}
+  return;
+ }
+ const prevKey=S?S.seed+':'+S.off+':'+S.round+':'+S.rs:'';
+ S=s;
+ if(s.phase==='play'&&!s.paused){
+  const nd=Date.now()+s.left;
+  if(prevKey!==s.seed+':'+s.off+':'+s.round+':'+s.rs||Math.abs(nd-deadline)>1500)deadline=nd;
+ }
+ clearInterval(joinT);joinT=null;
+ const k=JSON.stringify(Object.assign({},s,{seq:0,left:0}));
+ if(k!==lastRenderKey||wasGone||screen!=='game'){lastRenderKey=k;render()}
+}
+function onDown(env){
+ const d=env.d&&typeof env.d==='object'?env.d:{};
+ if(S&&env.f!==S.host)return;
+ if(env.t==='full'&&d.to===ME)leave('That game is full ('+MAXP+' players). Ask the host to start a new one.');
+ else if(env.t==='end'&&S&&env.f===S.host)leave('The host ended the game.');
+}
+function playerLoop(){
+ if(!net||isHost||solo||screen!=='game')return;
+ const now=Date.now();
+ if(meP()){
+  if(!playerLoop.lp||now-playerLoop.lp>4000){playerLoop.lp=now;net.pub('u','ping',{})}
+  if(now-lastStateAt>11000&&!hostGone){hostGone=true;render()}
+ }
+}
+
+/* ---------- start / join / leave ---------- */
+function newState(c){return{v:2,code:c,host:ME,seed:rid(8),off:0,total:10,round:0,rs:0,seq:0,left:0,phase:'lobby',paused:false,players:[{id:ME,name:myName,score:0,on:true,c:0}],result:null,log:[]}}
+async function createGame(){
+ let c='';const r=crypto.getRandomValues(new Uint8Array(5));for(const x of r)c+=ALPHA[x%ALPHA.length];
+ code=c;isHost=true;solo=false;S=newState(c);screen='game';lastSeen={};render();
+ const n=await netOpen(c,{topic:APP+'/'+c+'/s',payload:'',qos:0,retain:true});
+ if(net!==n)return;
+ if(!n){leave('Could not reach the game servers. Check your internet and try again.');return}
+ netStatus();bcast();
+}
+async function joinGame(c){
+ code=c;isHost=false;solo=false;S=null;screen='game';hostGone=false;lastStateAt=Date.now();lastRenderKey='';render();
+ SS.set('sd_join',{code:c,name:myName});
+ const n=await netOpen(c,{topic:APP+'/'+c+'/u',payload:JSON.stringify({f:ME,t:'bye'}),qos:0,retain:false});
+ if(net!==n)return;
+ if(!n){leave('Could not reach the game servers. Check your internet and try again.');return}
+ netStatus();sendHello();
+ let tries=0;clearInterval(joinT);
+ joinT=setInterval(()=>{
+  if(net!==n){clearInterval(joinT);return}
+  if(S&&meP()){clearInterval(joinT);joinT=null;return}
+  if(++tries>7){clearInterval(joinT);joinT=null;leave(S?'The host did not let you in. Try joining again.':'No game found with that code. Check it and try again.');return}
+  sendHello();
+ },1500);
+}
+function startSolo(){
+ solo=true;isHost=true;net=null;code='SOLO0';S=newState(code);screen='game';startGame(false);
+}
+function leave(m){
+ const n=net;
+ if(n){
+  if(isHost&&!solo){n.pub('d','end',{});n.clearState()}
+  else if(!solo)n.pub('u','bye',{});
+  net=null;setTimeout(()=>netClose(n,true),400);
+ }
+ clearTimeout(gt);clearInterval(joinT);joinT=null;
+ SS.del('sd_host');SS.del('sd_join');
+ S=null;solo=false;isHost=false;screen='home';hostGone=false;lastKey='';lastRenderKey='';netUp=false;
+ homeMsg=typeof m==='string'?m:'';render();
+}
+
+/* ---------- screens ---------- */
+function statusLine(){return h('p',{id:'netst',class:'status'+(netUp?'':' off')},h('i'),netUp?' Connected':' Connecting…')}
+function buildHome(){
+ const ok=libState==='ok';
+ const nm=h('input',{id:'nm',maxlength:14,autocomplete:'nickname',value:myName,placeholder:'e.g. Maya'});
+ const cd=h('input',{id:'cd',maxlength:5,autocomplete:'off',placeholder:'ABC12',value:inviteCode});
+ const msg=h('p',{class:'msg',role:'alert'},homeMsg);
+ const nameVal=()=>{myName=clean(nm.value)||'Player';LS.set('sd_name',myName);return myName};
+ const create=h('button',{id:'bcreate',disabled:!ok,onclick:()=>{nameVal();homeMsg='';createGame()}},'Start a new game');
+ const join=h('button',{id:'bjoin',class:'fr',disabled:!ok,onclick:()=>{
+  nameVal();const c=cd.value.toUpperCase().replace(/[^A-Z0-9]/g,'');
+  if(c.length!==5){msg.textContent='Enter the 5-character code.';return}
+  homeMsg='';joinGame(c);
+ }},'Join');
+ const solob=h('button',{class:'sec',onclick:()=>{nameVal();startSolo()}},'Practise alone');
+ const note=libState==='ok'?'Up to '+MAXP+' players. Start a game and send your friends the invite link — no sign-up needed.':libState==='loading'?'Getting online play ready…':'Online play could not load on this network, so only Practise alone works right now. Try refreshing.';
+ const invite=inviteCode?h('div',{class:'invite'},'You’re invited to game ',h('b',null,inviteCode),'. Type your name and tap Join.'):null;
+ const joinCard=h('div',{class:'card'},h('label',{for:'cd'},'Friend’s game code'),h('div',{class:'row'},cd,join));
+ const createCard=h('div',{class:'card gap'},h('div',null,h('label',{for:'nm'},'Your name'),nm),inviteCode?null:create);
+ show(h('h1',null,'Scramble Duel'),h('p',{class:'sub'},'Unscramble the word from its meaning. First to spell it wins the point.'),
+  invite,createCard,joinCard,
+  inviteCode?h('div',{class:'gap'},create):null,
+  h('p',null),solob,msg,
+  h('p',{class:'note',id:'hnote'},note));
+ if(inviteCode&&!myName)setTimeout(()=>{try{nm.focus()}catch(e){}},0);
+}
+function refreshHome(){
+ if(screen!=='home')return;
+ const a=document.activeElement;
+ if(a&&a.matches&&a.matches('input')){
+  const ok=libState==='ok';['bcreate','bjoin'].forEach(id=>{const b=document.getElementById(id);if(b)b.disabled=!ok});
+  const n=document.getElementById('hnote');if(n)n.textContent=ok?'Up to '+MAXP+' players. Start a game and send your friends the invite link — no sign-up needed.':libState==='loading'?'Getting online play ready…':'Online play could not load on this network, so only Practise alone works right now. Try refreshing.';
+  return;
+ }
+ buildHome();
+}
+function inviteUrl(){const u=new URL(location.href);u.search='';u.hash='';u.searchParams.set('join',S.code);return u.toString()}
+function copyBtn(label,getText){
+ const b=h('button',{class:'sec',onclick:async()=>{
+  try{await navigator.clipboard.writeText(getText());b.textContent='Copied!'}
+  catch(e){b.textContent='Press and hold the text above to copy'}
+  setTimeout(()=>b.textContent=label,1800);
+ }},label);return b;
+}
+function playerSlot(p){
+ const you=p.id===ME,host=S&&p.id===S.host;
+ const tag=[you?'You':null,host?'Host':null,!p.on?'Away':null].filter(Boolean).join(' · ');
+ return h('div',{class:'slot '+cls(p)+(p.on?'':' away')},h('span',{class:'dot'}),h('b',null,p.name),h('span',{class:'note'},tag));
+}
+function buildLobby(){
+ const host=isHost,online=onlineCount();
+ const url=inviteUrl();
+ const slots=S.players.map(playerSlot);
+ if(S.players.length<MAXP)slots.push(h('div',{class:'slot'},h('span',{class:'dot'}),h('span',{class:'note'},S.players.length<2?'Waiting for friends to join…':'Room for '+(MAXP-S.players.length)+' more')));
+ show(h('h2',null,'Your game'),h('p',{class:'sub'},'Send your friends the link (or the code). Up to '+MAXP+' players.'),
+  statusLine(),
+  h('div',{class:'card gap'},h('div',{class:'big','aria-label':'Game code '+S.code.split('').join(' ')},S.code),
+   h('div',{class:'link'},url),
+   h('div',{class:'row2'},copyBtn('Copy invite link',inviteUrl),copyBtn('Copy code',()=>S.code))),
+  h('div',{class:'card'},h('label',null,'Players ('+S.players.length+' of '+MAXP+')'),slots),
+  host?h('div',{class:'card'},h('label',null,'Words per game'),h('div',{class:'row'},[10,15,20].map(n=>h('button',{class:'sec','aria-pressed':String(S.total===n),onclick:()=>{S.total=n;bcast()}},String(n))))):h('p',{class:'note'},'Waiting for the host to start. '+S.total+' words this game.'),
+  host?h('button',{disabled:online<2,onclick:()=>startGame(false)},online<2?'Waiting for friends…':'Start game with '+online+' players'):null,
+  h('p',null),h('button',{class:'sec',onclick:()=>leave()},host?'Close game':'Leave game'));
+}
+function scoreCards(){
+ const ps=S.players.slice().sort((a,b)=>(b.id===ME)-(a.id===ME));
+ return h('div',{class:'scores'},ps.map(p=>h('div',{class:'sc '+cls(p)+(p.on?'':' away')},h('span',null,p.name+(p.id===ME?' (you)':'')),h('b',null,String(p.score)))));
+}
+function overlay(){
+ if(solo)return null;
+ let t='';
+ if(hostGone)t='Lost contact with the host. Waiting for them to come back…';
+ else if(S.paused)t='Not enough players online, so the game is paused until someone comes back.';
+ return t?h('div',{class:'over',role:'status'},t):null;
+}
+function buildPlay(){
+ const word=BANK[wordIdx(S.round)];
+ const key=S.seed+':'+S.off+':'+S.round+':'+S.rs;
+ const mp=meP();
+ if(S.phase==='play'&&key!==lastKey){lastKey=key;picks=[];locked=false;fb='';fbc='';tiles=scrFor(word.w,mp?mp.c:0)}
+ const kids=[overlay(),solo?null:statusLine(),scoreCards(),h('div',{class:'meta'},h('span',null,'Word '+(S.round+1)+' of '+S.total),h('span',{id:'secs'},'')),h('div',{class:'bar'},h('i',{id:'bar'}))];
+ if(S.phase==='play'){
+  kids.push(h('div',{class:'card'},h('div',{class:'note'},word.w.length+' letters'),h('div',{class:'clue'},word.m)));
+  kids.push(h('div',{class:'slots',id:'slots','aria-label':'Your answer'},word.w.split('').map(()=>h('div',{class:'box'}))));
+  kids.push(h('div',{class:'tiles',id:'tiles'},tiles.map((l,i)=>h('button',{class:'tile','aria-label':'Letter '+l,onclick:()=>pick(i)},l))));
+  kids.push(h('div',{class:'row2'},h('button',{class:'sec',onclick:()=>{if(locked)return;tiles=shuf(tiles,Math.random);if(tiles.join('')===word.w)tiles.reverse();picks=[];upd()}},'Shuffle'),h('button',{class:'sec',onclick:()=>{if(locked)return;picks=[];upd()}},'Clear')));
+  kids.push(h('div',{class:'fb '+fbc,id:'fb','aria-live':'polite'},fb));
+ }else{
+  const r=S.result,mine=r===ME,none=r==='n'||!r,wp=pById(r);
+  kids.push(h('div',{class:'card banner '+(none?'':cls(wp)||'p0')},h('h2',null,none?'Time is up':mine?'You got it first':nameOf(r)+' got it first'),h('div',{class:'w'},word.w),h('div',null,word.m)));
+ }
+ kids.push(h('p',null),h('button',{class:'sec',onclick:()=>leave()},isHost&&!solo?'End game for everyone':'Leave game'));
+ show(...kids);upd();tick();
+}
+function blocked(){return !S||S.phase!=='play'||locked||(!solo&&(S.paused||hostGone))}
+function upd(){
+ const word=S&&S.phase==='play'?BANK[wordIdx(S.round)]:null;if(!word)return;
+ const sl=document.getElementById('slots'),tl=document.getElementById('tiles');if(!sl||!tl)return;
+ [...sl.children].forEach((b,i)=>{const l=picks[i]!=null?tiles[picks[i]]:'';b.textContent=l;b.className='box'+(l?' on':'')});
+ const bl=blocked();
+ [...tl.children].forEach((b,i)=>{b.textContent=tiles[i];b.setAttribute('aria-label','Letter '+tiles[i]);b.disabled=picks.includes(i)||bl});
+ const f=document.getElementById('fb');if(f){f.textContent=fb;f.className='fb '+fbc}
+}
+function pick(i){
+ if(blocked()||picks.includes(i))return;
+ const word=BANK[wordIdx(S.round)].w;picks.push(i);upd();
+ if(picks.length===word.length){
+  if(picks.map(k=>tiles[k]).join('')===word){
+   locked=true;fb='Got it!';fbc='ok';
+   if(isHost)finish(ME);else{net&&net.pub('u','solve',{round:S.round,rs:S.rs});fb='Got it! Checking who was first…'}
+   upd();
+  }else{
+   fb='Not that one. Try again.';fbc='bad';const sl=document.getElementById('slots');
+   if(sl){sl.classList.remove('shake');void sl.offsetWidth;sl.classList.add('shake')}
+   setTimeout(()=>{picks=[];upd()},450);upd();
+  }
+ }else{fb='';fbc='';upd()}
+}
+function buildFinal(){
+ const ranked=S.players.slice().sort((a,b)=>b.score-a.score);
+ const top=ranked.length?ranked[0].score:0,leaders=ranked.filter(p=>p.score===top);
+ let title;
+ if(solo)title='You solved '+(meP()?meP().score:0)+' of '+S.total;
+ else if(top===0)title='Nobody scored this time';
+ else if(leaders.length>1)title=leaders.some(p=>p.id===ME)?'You tied for first!':'It’s a draw';
+ else title=leaders[0].id===ME?'You win!':leaders[0].name+' wins';
+ const rank=solo?null:h('div',{class:'card'},h('label',null,'Final scores'),h('ol',{class:'rank'},ranked.map((p,i)=>h('li',{class:cls(p)},h('span',{class:'dot'}),h('b',null,(i+1)+'. '+p.name+(p.id===ME?' (you)':'')),h('span',{class:'pts'},String(p.score))))));
+ const rec=S.log.map(([i,w])=>{const p=pById(w);const who=w==='n'?'Nobody':w===ME?'You':(p?p.name:'Someone');return h('li',null,h('span',null,BANK[i].w.toLowerCase()),h('span',{class:'tag '+(w==='n'?'':cls(p))},who))});
+ show(h('div',{class:'card banner'},h('h2',null,title),h('p',{class:'note'},solo?'Nice practice run.':S.total+' words played.')),
+  rank,
+  h('div',{class:'card'},h('label',null,'Recap'),h('ul',{class:'rec'},rec)),
+  isHost?h('button',{disabled:!solo&&onlineCount()<2,onclick:()=>startGame(true)},'Play again (new words)'):h('p',{class:'note'},'Waiting for the host to start another game.'),
+  h('p',null),h('button',{class:'sec',onclick:()=>leave()},'Leave game'));
+}
+function render(){
+ if(screen==='home'){buildHome();return}
+ if(!S||!meP()){show(h('h2',null,'Joining…'),h('p',{class:'sub'},'Looking for game '+code+'.'),statusLine(),h('button',{class:'sec',onclick:()=>leave()},'Cancel'));return}
+ if(S.phase==='lobby')buildLobby();else if(S.phase==='final')buildFinal();else buildPlay();
+}
+function tick(){
+ const b=document.getElementById('bar'),s=document.getElementById('secs');
+ if(!b||!S)return;
+ if(S.phase!=='play'){b.style.width='0';if(s)s.textContent='';return}
+ let left;
+ if(!solo&&(S.paused||hostGone))left=isHost?pausedLeft:S.left;
+ else left=Math.max(0,(isHost?endsAt:deadline)-Date.now());
+ b.style.width=(left/ROUND_MS*100)+'%';if(s)s.textContent=Math.ceil(left/1000)+'s';
+}
+setInterval(tick,200);
+setInterval(()=>{if(isHost)hostLoop();else playerLoop();netStatus()},1000);
+document.addEventListener('keydown',e=>{
+ if(screen!=='game'||!S||S.phase!=='play'||blocked()||e.ctrlKey||e.metaKey||e.altKey)return;
+ if(e.target&&e.target.matches&&e.target.matches('input'))return;
+ if(e.key==='Backspace'){e.preventDefault();picks.pop();fb='';fbc='';upd();return}
+ if(/^[a-zA-Z]$/.test(e.key)){const L=e.key.toUpperCase();const i=tiles.findIndex((t,k)=>t===L&&!picks.includes(k));if(i>=0)pick(i)}
+});
+window.addEventListener('pagehide',()=>{if(net&&!solo&&!isHost)try{net.pub('u','bye',{})}catch(e){}});
+
+/* resume after a refresh: host keeps the game, players keep their seat and score */
+function afterLib(){
+ const sh=SS.get('sd_host');
+ if(sh&&sh.S&&Date.now()-sh.t<30*60000){
+  code=sh.code;const s=okState(sh.S);
+  if(s&&s.host===ME){
+   S=s;isHost=true;solo=false;screen='game';lastSeen={};
+   const now=Date.now();S.players.forEach(p=>{if(p.id!==ME)lastSeen[p.id]=now});
+   if(S.phase==='play'||S.phase==='result'){
+    // restart the clock from where it was
+    if(S.phase==='play'){arm(Math.max(S.left,10000),()=>finish('n'));deadline=endsAt}else arm(RESULT_MS,next);
+    if(S.paused){S.paused=false;pause()}
+   }
+   render();
+   netOpen(code,{topic:APP+'/'+code+'/s',payload:'',qos:0,retain:true}).then(n=>{if(net===n&&n){netStatus();checkPause();bcast()}});
+   return;
+  }
+ }
+ const sj=SS.get('sd_join');
+ if(sj&&typeof sj.code==='string'&&/^[A-Z0-9]{5}$/.test(sj.code)){myName=clean(sj.name)||myName||'Player';joinGame(sj.code)}
+}
+render();
+loadLib(0);
+})();
+</script>
+</body>
+</html>
