@@ -3,82 +3,135 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Scramble Duel</title>
-<meta name="description" content="Unscramble the word from its meaning. Play with up to 6 friends — just share the link.">
+<title>Scramble Duel · Taspear's Creation</title>
+<meta name="description" content="Taspear's Creation presents Scramble Duel. Unscramble the word from its meaning. Play with up to 10 friends — just share the link.">
+<meta name="theme-color" content="#f5f2ec">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<script>
+/* pick the theme before first paint so there is no flash */
+(function(){var t=null;try{t=localStorage.getItem('sd_theme')}catch(e){}
+if(t!=='light'&&t!=='dark')t=(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';
+document.documentElement.setAttribute('data-theme',t)})();
+</script>
 <style>
-:root{--bg:#f6f4ef;--card:#ffffff;--ink:#1d2a2e;--mut:#5f7075;--line:#e2ded4;--me:#0b7f81;--me-bg:#dcf2f1;--fr:#d9621a;--fr-bg:#fde9d9;--tile:#fbf5e4;--tile-edge:#d8c9a0;--tile-ink:#2b2415;--bad:#c0392b;--ok:#1c7a46;
---c0:#d9621a;--c0b:#fde9d9;--c1:#7b4fd6;--c1b:#ece5fb;--c2:#c2367a;--c2b:#fbe3ee;--c3:#2f6fd1;--c3b:#e2ecfb;--c4:#8a6d0f;--c4b:#f6efd2;--c5:#3d8b3d;--c5b:#e2f2e2;
-box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#12181a;--card:#1b2326;--ink:#eef2f2;--mut:#9aa9ad;--line:#2c373b;--me:#3cc2c4;--me-bg:#17393a;--fr:#f39a5b;--fr-bg:#43291a;--tile-edge:#b9a878;--bad:#ff7b6b;--ok:#5ed08f;
---c0:#f39a5b;--c0b:#43291a;--c1:#b39cf5;--c1b:#2e2548;--c2:#f08bb8;--c2b:#46202f;--c3:#7fb0f5;--c3b:#1d2c46;--c4:#e0c35a;--c4b:#3a3218;--c5:#7fd07f;--c5b:#1d3a1d}}
-:root[data-theme="dark"]{color-scheme:dark;--bg:#12181a;--card:#1b2326;--ink:#eef2f2;--mut:#9aa9ad;--line:#2c373b;--me:#3cc2c4;--me-bg:#17393a;--fr:#f39a5b;--fr-bg:#43291a;--tile-edge:#b9a878;--bad:#ff7b6b;--ok:#5ed08f;
---c0:#f39a5b;--c0b:#43291a;--c1:#b39cf5;--c1b:#2e2548;--c2:#f08bb8;--c2b:#46202f;--c3:#7fb0f5;--c3b:#1d2c46;--c4:#e0c35a;--c4b:#3a3218;--c5:#7fd07f;--c5b:#1d3a1d}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
+:root,:root[data-theme="light"]{color-scheme:light;
+--bg:#f5f2ec;--bg2:#efe9df;--glow1:rgba(11,127,129,.10);--glow2:rgba(217,98,26,.08);
+--card:#ffffffd9;--card-solid:#ffffff;--ink:#1f2b2f;--mut:#66767a;--line:#e5dfd3;--shadow:0 1px 2px rgba(40,30,10,.05),0 8px 24px rgba(40,30,10,.06);
+--me:#0b7f81;--me-2:#14a3a5;--me-bg:#dcf2f1;--on-me:#fff;--fr:#d9621a;--fr-bg:#fde9d9;
+--tile:#fbf5e4;--tile-edge:#dccb9f;--tile-ink:#2b2415;--bad:#c0392b;--ok:#1c7a46;--warn:#c98a12;
+--c0:#d9621a;--c0b:#fde9d9;--c1:#7b4fd6;--c1b:#ece5fb;--c2:#c2367a;--c2b:#fbe3ee;--c3:#2f6fd1;--c3b:#e2ecfb;--c4:#a07a0c;--c4b:#f7efd3;
+--c5:#3d8b3d;--c5b:#e2f2e2;--c6:#c63d3d;--c6b:#fbe2e2;--c7:#8a5a3b;--c7b:#f3e7de;--c8:#4b5bd6;--c8b:#e5e8fb;--c9:#a845bd;--c9b:#f5e3f9}
+:root[data-theme="dark"]{color-scheme:dark;
+--bg:#0f1618;--bg2:#121c1f;--glow1:rgba(60,194,196,.12);--glow2:rgba(243,154,91,.07);
+--card:#18222599;--card-solid:#182225;--ink:#e9efef;--mut:#93a4a8;--line:#27343a;--shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.25);
+--me:#3cc2c4;--me-2:#5fd6d8;--me-bg:#163638;--on-me:#08292a;--fr:#f39a5b;--fr-bg:#3f2718;
+--tile:#f3ead2;--tile-edge:#b09d6c;--tile-ink:#2b2415;--bad:#ff7b6b;--ok:#5ed08f;--warn:#f0c05a;
+--c0:#f39a5b;--c0b:#3f2718;--c1:#b39cf5;--c1b:#2b2346;--c2:#f08bb8;--c2b:#43202f;--c3:#7fb0f5;--c3b:#1b2a44;--c4:#e0c35a;--c4b:#383018;
+--c5:#7fd07f;--c5b:#1b371b;--c6:#ff8f8f;--c6b:#432020;--c7:#d9a988;--c7b:#3a2a20;--c8:#9aa6ff;--c8b:#232848;--c9:#e39af2;--c9b:#3d2244}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.45 "DM Sans",system-ui,sans-serif;overflow-x:hidden}
-main{max-width:460px;margin:0 auto;padding:20px 16px 40px}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-tap-highlight-color:transparent}
+body{margin:0;min-height:100vh;color:var(--ink);font:400 16px/1.5 "DM Sans",system-ui,sans-serif;overflow-x:hidden;
+background:radial-gradient(900px 500px at 10% -10%,var(--glow1),transparent 60%),radial-gradient(700px 500px at 110% 10%,var(--glow2),transparent 60%),linear-gradient(var(--bg),var(--bg2));background-attachment:fixed;
+transition:background-color .4s ease,color .4s ease;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.top{max-width:480px;margin:0 auto;padding:14px 16px 0;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brand{font:700 .72rem "DM Sans",sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--mut)}
+.theme{display:inline-flex;padding:3px;border-radius:99px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);backdrop-filter:blur(8px)}
+.theme button{width:auto;padding:6px 12px;border-radius:99px;background:transparent;color:var(--mut);font:700 .8rem "DM Sans",sans-serif;box-shadow:none;transition:background .3s,color .3s}
+.theme button[aria-pressed="true"]{background:var(--me);color:var(--on-me);outline:none}
+main{max-width:480px;margin:0 auto;padding:14px 16px 48px}
+main.enter>*{animation:rise .45s cubic-bezier(.2,.7,.2,1) both}
+main.enter>*:nth-child(2){animation-delay:.04s}main.enter>*:nth-child(3){animation-delay:.08s}main.enter>*:nth-child(4){animation-delay:.12s}main.enter>*:nth-child(5){animation-delay:.16s}main.enter>*:nth-child(n+6){animation-delay:.2s}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 h1,h2,.big{font-family:"Bricolage Grotesque","DM Sans",sans-serif;margin:0}
-h1{font-size:2.3rem;font-weight:800;letter-spacing:-.02em}
-.sub{color:var(--mut);margin:.25rem 0 1.4rem}
-.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px}
-label{display:block;font-weight:700;font-size:.85rem;margin:0 0 6px}
-input{width:100%;font:inherit;padding:12px 14px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink)}
-input#cd{text-transform:uppercase;letter-spacing:.2em;font-weight:700}
+h1{font-size:2.4rem;font-weight:800;letter-spacing:-.02em;line-height:1.05}
+h2{font-size:1.6rem;font-weight:800;letter-spacing:-.01em}
+.sub{color:var(--mut);margin:.35rem 0 1.3rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px;margin-bottom:12px;box-shadow:var(--shadow);backdrop-filter:blur(10px);transition:background .4s,border-color .4s}
+label{display:block;font-weight:700;font-size:.82rem;letter-spacing:.02em;margin:0 0 7px;color:var(--mut)}
+input{width:100%;font:inherit;padding:13px 15px;border-radius:14px;border:2px solid var(--line);background:var(--card-solid);color:var(--ink);transition:border-color .2s,box-shadow .2s}
+input:focus{outline:none;border-color:var(--me);box-shadow:0 0 0 4px var(--me-bg)}
+input#cd{text-transform:uppercase;letter-spacing:.22em;font-weight:700}
 .row{display:flex;gap:8px}.row>*{flex:1}.row>input{flex:2}
-button{font:700 1rem "DM Sans",sans-serif;border:0;border-radius:12px;padding:13px 16px;cursor:pointer;background:var(--me);color:#fff;width:100%}
-button.sec{background:transparent;color:var(--ink);border:2px solid var(--line)}
-button.fr{background:var(--fr)}
-button:disabled{opacity:.45;cursor:not-allowed}
-button[aria-pressed="true"]{outline:3px solid var(--me);outline-offset:2px}
+button{font:700 1rem "DM Sans",sans-serif;border:0;border-radius:14px;padding:14px 16px;cursor:pointer;background:linear-gradient(180deg,var(--me-2),var(--me));color:var(--on-me);width:100%;
+box-shadow:0 6px 16px -6px var(--me);transition:transform .15s ease,box-shadow .2s ease,opacity .2s,background .3s}
+button:hover:not(:disabled){transform:translateY(-1px)}
+button:active:not(:disabled){transform:translateY(1px) scale(.99)}
+button.sec{background:var(--card-solid);color:var(--ink);border:2px solid var(--line);box-shadow:none}
+button.fr{background:linear-gradient(180deg,var(--c0),var(--fr));color:#fff;box-shadow:0 6px 16px -6px var(--fr)}
+button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.seg button[aria-pressed="true"]{border-color:var(--me);background:var(--me-bg);color:var(--ink)}
 :focus-visible{outline:3px solid var(--fr);outline-offset:2px}
 .gap>*+*{margin-top:10px}
-.or{text-align:center;color:var(--mut);font-size:.85rem;margin:14px 0}
 .msg{color:var(--bad);font-weight:500;min-height:1.4em;margin:8px 0 0}
 .note{color:var(--mut);font-size:.88rem}
-.invite{background:var(--me-bg);border:2px solid var(--me);border-radius:14px;padding:12px;margin-bottom:12px;font-weight:500}
-.big{font-size:3rem;font-weight:800;letter-spacing:.14em;text-align:center;color:var(--me)}
+.invite{background:var(--me-bg);border:1px solid var(--me);border-radius:16px;padding:12px 14px;margin-bottom:12px;font-weight:500}
+.big{font-size:3rem;font-weight:800;letter-spacing:.16em;text-align:center;color:var(--me)}
 .link{font-size:.82rem;word-break:break-all;color:var(--mut);text-align:center;user-select:all}
-/* player colours: .me is always teal for the viewer, others get their own slot colour */
+/* player colours: .me is always teal for the viewer, everyone else keeps their own colour */
 .me{--pc:var(--me);--pcb:var(--me-bg)}
-.p0{--pc:var(--c0);--pcb:var(--c0b)}.p1{--pc:var(--c1);--pcb:var(--c1b)}.p2{--pc:var(--c2);--pcb:var(--c2b)}
-.p3{--pc:var(--c3);--pcb:var(--c3b)}.p4{--pc:var(--c4);--pcb:var(--c4b)}.p5{--pc:var(--c5);--pcb:var(--c5b)}
-.slot{display:flex;align-items:center;gap:10px;padding:12px;border-radius:12px;border:2px solid var(--line);margin-top:8px}
+.p0{--pc:var(--c0);--pcb:var(--c0b)}.p1{--pc:var(--c1);--pcb:var(--c1b)}.p2{--pc:var(--c2);--pcb:var(--c2b)}.p3{--pc:var(--c3);--pcb:var(--c3b)}.p4{--pc:var(--c4);--pcb:var(--c4b)}
+.p5{--pc:var(--c5);--pcb:var(--c5b)}.p6{--pc:var(--c6);--pcb:var(--c6b)}.p7{--pc:var(--c7);--pcb:var(--c7b)}.p8{--pc:var(--c8);--pcb:var(--c8b)}.p9{--pc:var(--c9);--pcb:var(--c9b)}
+.slot{display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:14px;border:1.5px solid var(--line);margin-top:8px;transition:background .3s,border-color .3s}
 .slot[class*=" p"],.slot.me{border-color:var(--pc);background:var(--pcb)}
 .slot b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dot{width:12px;height:12px;border-radius:50%;background:var(--pc,var(--mut));flex:none}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--pc,var(--mut));flex:none;box-shadow:0 0 0 3px var(--pcb,transparent)}
 .away{opacity:.5}
-.scores{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:8px;margin-bottom:12px}
-.sc{border-radius:14px;padding:10px 12px;border:2px solid var(--pc);background:var(--pcb);min-width:0}
-.sc b{display:block;font:800 1.9rem "Bricolage Grotesque",sans-serif;line-height:1}
-.sc span{display:block;font-size:.8rem;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.meta{display:flex;justify-content:space-between;font-weight:700;font-size:.9rem;margin-bottom:6px}
-.bar{height:10px;border-radius:99px;background:var(--line);overflow:hidden;margin-bottom:12px}
-.bar i{display:block;height:100%;width:100%;background:var(--me);border-radius:99px}
-.clue{font:600 1.25rem/1.35 "Bricolage Grotesque",sans-serif}
-.slots,.tiles{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:14px 0}
-.box{width:38px;height:46px;border-radius:10px;border:2px dashed var(--line);display:grid;place-items:center;font:800 1.3rem "Bricolage Grotesque",sans-serif;color:var(--me)}
-.box.on{border-style:solid;border-color:var(--me);background:var(--me-bg)}
-.tile{width:46px;height:52px;padding:0;border-radius:11px;background:var(--tile);color:var(--tile-ink);font:800 1.4rem "Bricolage Grotesque",sans-serif;box-shadow:0 4px 0 var(--tile-edge);border:1px solid var(--tile-edge)}
+.scores{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px;margin-bottom:12px}
+.sc{border-radius:16px;padding:9px 11px;border:1.5px solid var(--pc);background:var(--pcb);min-width:0;transition:transform .3s}
+.sc b{display:block;font:800 1.7rem "Bricolage Grotesque",sans-serif;line-height:1.05}
+.sc span{display:block;font-size:.76rem;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sc.bump{animation:bump .6s ease}@keyframes bump{30%{transform:scale(1.08)}}
+.meta{display:flex;justify-content:space-between;font-weight:700;font-size:.9rem;margin-bottom:7px;color:var(--mut)}
+.bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden;margin-bottom:14px}
+.bar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--me),var(--me-2));border-radius:99px;transition:width .25s linear,background .6s}
+.bar.mid i{background:linear-gradient(90deg,var(--warn),#e8b04a)}.bar.low i{background:linear-gradient(90deg,var(--bad),#ff9a7a)}
+.clue{font:600 1.3rem/1.35 "Bricolage Grotesque",sans-serif}
+.slots,.tiles{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin:16px 0}
+.box{width:40px;height:48px;padding:0;border-radius:12px;border:2px dashed var(--line);background:transparent;display:grid;place-items:center;font:800 1.3rem "Bricolage Grotesque",sans-serif;color:var(--me);box-shadow:none;cursor:default}
+.box.on{border-style:solid;border-color:var(--me);background:var(--me-bg);cursor:pointer}
+.box.on:hover{border-color:var(--bad)}
+.box.pop{animation:pop .22s ease}@keyframes pop{from{transform:scale(.7);opacity:.3}}
+.box:hover:not(.on){transform:none}
+.box:disabled{opacity:1;cursor:default}
+.tile{width:48px;height:54px;padding:0;border-radius:13px;background:var(--tile);color:var(--tile-ink);font:800 1.45rem "Bricolage Grotesque",sans-serif;box-shadow:0 4px 0 var(--tile-edge),0 8px 14px -8px rgba(0,0,0,.25);border:1px solid var(--tile-edge);transition:transform .12s ease,box-shadow .12s ease,opacity .2s}
 .tile:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 var(--tile-edge)}
-.tile:disabled{opacity:.3;box-shadow:none}
-.fb{min-height:1.5em;text-align:center;font-weight:700}.fb.bad{color:var(--bad)}.fb.ok{color:var(--ok)}
+.tile:disabled{opacity:.25;box-shadow:none;transform:scale(.94)}
+.fb{min-height:1.5em;text-align:center;font-weight:700;transition:color .2s}.fb.bad{color:var(--bad)}.fb.ok{color:var(--ok)}
+.hint{text-align:center;font-size:.8rem;color:var(--mut);margin-top:-6px;margin-bottom:6px}
 .shake{animation:sh .4s}@keyframes sh{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
-.banner{text-align:center}.banner h2{font-size:1.7rem;color:var(--pc,var(--ink))}.banner .w{font:800 2rem "Bricolage Grotesque",sans-serif;letter-spacing:.1em;color:var(--me);margin:.4rem 0}
-.over{background:var(--fr-bg);border:2px solid var(--fr);border-radius:14px;padding:12px;margin-bottom:12px;font-weight:500}
-ul.rec{list-style:none;padding:0;margin:0}ul.rec li{display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
-ol.rank{padding:0;margin:0;list-style:none}ol.rank li{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+.banner{text-align:center;animation:glow .5s ease both}.banner h2{font-size:1.7rem;color:var(--pc,var(--ink))}
+@keyframes glow{from{transform:scale(.96);opacity:0}}
+.banner .w{font:800 2.1rem "Bricolage Grotesque",sans-serif;letter-spacing:.12em;color:var(--me);margin:.35rem 0}
+.over{background:var(--fr-bg);border:1px solid var(--fr);border-radius:16px;padding:12px 14px;margin-bottom:12px;font-weight:500}
+.over button{margin-top:10px}
+ul.rec{list-style:none;padding:0;margin:0}ul.rec li{display:flex;justify-content:space-between;gap:8px;padding:9px 0;border-bottom:1px solid var(--line)}ul.rec li:last-child{border-bottom:0}
+ol.rank{padding:0;margin:0;list-style:none}ol.rank li{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}ol.rank li:last-child{border-bottom:0}
 ol.rank li b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 ol.rank .pts{font:800 1.3rem "Bricolage Grotesque",sans-serif}
 .tag{font-weight:700;color:var(--pc,var(--mut))}
 .row2{display:flex;gap:8px;justify-content:center}.row2 button{width:auto;flex:1}
-.status{display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--mut);margin:0 0 10px}
-.status i{width:8px;height:8px;border-radius:50%;background:var(--ok)}.status.off i{background:var(--bad)}
+.status{display:flex;align-items:center;gap:7px;font-size:.8rem;color:var(--mut);margin:0 0 10px}
+.status i{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 25%,transparent)}.status.off i{background:var(--bad)}
+/* opening page */
+.intro{min-height:calc(100vh - 120px);display:flex;flex-direction:column;justify-content:center;text-align:center;padding:10px 0 30px}
+.eyebrow{font:700 .78rem "DM Sans",sans-serif;letter-spacing:.3em;text-transform:uppercase;color:var(--mut);margin-bottom:14px}
+.title{display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:18px}
+.title .ln{display:flex;gap:5px;justify-content:center;flex-wrap:nowrap}
+.title .t{width:34px;height:42px;border-radius:10px;display:grid;place-items:center;background:var(--tile);color:var(--tile-ink);border:1px solid var(--tile-edge);box-shadow:0 3px 0 var(--tile-edge);font:800 1.3rem "Bricolage Grotesque",sans-serif;transition:transform .7s cubic-bezier(.3,1.4,.4,1)}
+.title .t.ap{width:16px;background:transparent;border:0;box-shadow:none;color:var(--ink)}
+.presents{font:600 1rem "DM Sans",sans-serif;color:var(--mut);margin:2px 0 4px}
+.gname{font:800 2.2rem "Bricolage Grotesque",sans-serif;color:var(--me);letter-spacing:-.01em;margin-bottom:18px}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 22px}
+.how div{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 8px;font-size:.84rem;font-weight:500;box-shadow:var(--shadow)}
+.how b{display:block;font:800 1.2rem "Bricolage Grotesque",sans-serif;color:var(--me);margin-bottom:2px}
+.fine{font-size:.8rem;color:var(--mut);margin-top:12px}
+@media (max-width:380px){.title .t{width:29px;height:37px;font-size:1.1rem}.title .t.ap{width:12px}.gname{font-size:1.9rem}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
+<div class="top" id="top"></div>
 <main id="app"></main>
 <script type="text/plain" id="words">
 abundant|Present in large quantity; plentiful
@@ -228,14 +281,651 @@ wary|Cautious about possible danger
 wholesome|Good for health or moral well-being
 wistful|Quietly sad with longing
 zealous|Full of energy for a cause
+abandon|To leave behind for good
+abolish|To officially end a law or system
+abrupt|Sudden and unexpected
+absorb|To soak up or take in
+absurd|Wildly unreasonable or silly
+acclaim|Enthusiastic public praise
+adapt|To change to suit new conditions
+adequate|Good enough for what is needed
+admire|To look at with respect and approval
+advocate|To speak in support of something
+aesthetic|Concerned with beauty and taste
+affluent|Wealthy and comfortable
+aggravate|To make a problem worse
+agile|Able to move quickly and easily
+allure|The quality of being attractive
+aloof|Distant and unfriendly
+altruism|Selfless concern for others
+amateur|Someone who does something for fun, not pay
+amend|To change something to improve it
+amplify|To make louder or stronger
+ancient|Belonging to the very distant past
+anguish|Severe pain or deep sorrow
+animosity|Strong dislike or hostility
+anomaly|Something that differs from the normal
+anticipate|To expect or look forward to
+anxious|Worried and uneasy
+appease|To calm someone by giving in to demands
+applaud|To clap to show approval
+apprehend|To arrest; to understand
+aptitude|A natural ability to do something
+arbitrary|Based on chance, not reason
+archaic|Very old or old-fashioned
+ardent|Very enthusiastic or passionate
+arrogant|Proud in an unpleasant, superior way
+articulate|Able to express ideas clearly
+ascend|To go up or climb
+aspire|To strongly hope to achieve something
+assert|To state firmly
+assess|To judge the quality or value of
+assist|To help someone
+assume|To accept as true without proof
+attain|To succeed in reaching a goal
+authentic|Real and genuine
+avid|Very keen and enthusiastic
+awkward|Clumsy or uncomfortable
+baffle|To totally confuse
+banish|To send away as a punishment
+barren|Too poor to produce plants or crops
+barrier|Something that blocks the way
+belittle|To make someone seem unimportant
+beneficial|Having a good effect
+betray|To be disloyal to someone
+bizarre|Very strange or unusual
+bland|Lacking flavor or interest
+blatant|Done openly and without shame
+bleak|Cold, bare and without hope
+blissful|Extremely happy
+boast|To talk with too much pride
+bold|Confident and brave
+bolster|To support or strengthen
+bountiful|Large in quantity; generous
+boycott|To refuse to buy or take part in protest
+brash|Self-assertive in a rude way
+brilliant|Very bright or very clever
+brisk|Quick and active
+brittle|Hard but easily broken
+buoyant|Able to float; cheerful
+burden|A heavy load or duty
+calamity|A sudden disaster
+callous|Cruelly uncaring
+calm|Peaceful and not excited
+camouflage|Disguise that blends into surroundings
+candor|Openness and honesty
+captivate|To attract and hold attention
+carefree|Free from worry
+casual|Relaxed and informal
+catastrophe|A sudden great disaster
+cease|To bring to an end
+celebrate|To mark a happy occasion
+censor|To remove parts thought unacceptable
+chaos|Complete disorder and confusion
+charisma|Charm that inspires others
+cheerful|Noticeably happy and positive
+chronic|Lasting a long time
+circumvent|To find a way around an obstacle
+civil|Polite and courteous
+clarify|To make clearer
+clumsy|Awkward in movement
+coax|To gently persuade
+collaborate|To work together with others
+colossal|Gigantic, like a huge statue
+commend|To praise formally
+compel|To force someone to do something
+competent|Having the skill to do something well
+complacent|Too satisfied to see dangers
+comply|To act as asked or required
+compose|To write or create; to calm oneself
+comprehend|To understand fully
+compromise|An agreement where both sides give a little
+conceive|To form an idea in the mind
+condemn|To express strong disapproval
+condone|To accept bad behavior
+confide|To tell someone a secret
+conform|To follow rules or customs
+confront|To face up to a problem or person
+congenial|Pleasant and friendly
+conquer|To overcome and take control
+conscious|Aware and awake
+consequence|A result of an action
+conserve|To protect from harm or waste
+consistent|Acting the same way over time
+conspicuous|Standing out; easy to notice
+contemplate|To think deeply about
+content|Satisfied and happy
+contradict|To say the opposite of
+controversy|Public disagreement
+convenient|Fitting in well with needs
+convey|To communicate or carry
+convince|To make someone believe something
+cordial|Warm and friendly
+corrupt|Dishonest, especially for money
+courage|Bravery in the face of fear
+courteous|Polite and respectful
+covert|Secret or hidden
+coward|Someone lacking courage
+crave|To strongly desire
+credible|Able to be believed
+crucial|Extremely important
+cryptic|Mysterious and hard to understand
+cultivate|To grow or develop
+curious|Eager to know or learn
+cynical|Believing people act only for themselves
+dainty|Delicately small and pretty
+daunting|Seeming difficult or scary
+dazzle|To amaze with brightness or skill
+dearth|A lack or shortage
+decisive|Able to make choices quickly
+dedicate|To give time and effort to
+deduce|To work out by reasoning
+defer|To put off until later
+deficient|Lacking something needed
+deft|Quick and skillful
+defy|To openly resist
+delegate|To give a task to someone else
+deliberate|Done on purpose
+delicate|Fine and easily damaged
+delight|Great pleasure
+demolish|To pull or knock down
+denounce|To publicly declare wrong
+dense|Closely packed together
+deplete|To use up supplies
+deprive|To take away something needed
+deride|To mock or ridicule
+desolate|Empty and bleak
+despair|Complete loss of hope
+destitute|Extremely poor
+deter|To discourage from acting
+detest|To hate strongly
+devise|To plan or invent
+devour|To eat hungrily
+devout|Deeply religious or sincere
+dexterity|Skill with the hands
+dignity|Being worthy of respect
+dilemma|A hard choice between options
+diplomacy|Skill in handling people tactfully
+discard|To throw away
+discern|To recognize or notice
+disclose|To make known
+discord|Disagreement between people
+disdain|A feeling of scorn
+disguise|To change appearance to hide identity
+dismal|Gloomy and depressing
+disperse|To scatter in different directions
+disrupt|To interrupt or disturb
+dissent|Disagreement with official views
+distinct|Clearly different
+distort|To twist out of shape
+divert|To change direction
+docile|Calm and easy to control
+dogged|Persistent and determined
+domestic|Relating to the home or one's country
+dominate|To control or rule over
+drastic|Extreme and sudden
+dreary|Dull and gloomy
+dubious|Doubtful or suspicious
+durable|Able to last a long time
+dwindle|To gradually become smaller
+earnest|Sincere and serious
+eccentric|Unusual and a bit odd
+eclipse|To overshadow or block out
+edible|Safe to eat
+efficient|Working well without waste
+elated|Very happy and excited
+elegant|Graceful and stylish
+elevate|To raise up
+eliminate|To remove completely
+emerge|To come out into view
+eminent|Famous and respected
+empathy|Understanding others' feelings
+emulate|To copy someone you admire
+enchant|To charm or delight
+encounter|An unexpected meeting
+endeavor|A serious attempt
+endorse|To publicly support
+energetic|Full of energy
+engage|To take part in
+enhance|To improve the quality of
+enormous|Very large
+enrage|To make very angry
+ensure|To make certain
+enthrall|To capture full attention
+entice|To attract by offering something
+envious|Wanting what others have
+equitable|Fair and impartial
+eradicate|To destroy completely
+erode|To gradually wear away
+erratic|Unpredictable and irregular
+escalate|To increase rapidly
+esteem|Respect and admiration
+evade|To escape or avoid
+evident|Clearly seen or understood
+evoke|To bring a feeling to mind
+exaggerate|To make something seem bigger than it is
+exceed|To go beyond a limit
+excel|To be very good at something
+exclude|To leave out
+exemplary|Serving as a perfect example
+exotic|From a distant foreign place
+expand|To become larger
+expel|To force out
+explicit|Stated clearly and in detail
+exploit|To use unfairly for gain
+extravagant|Spending too much
+exuberant|Full of energy and excitement
+facilitate|To make easier
+faithful|Loyal and reliable
+fallacy|A mistaken belief
+famine|Extreme shortage of food
+fanatic|A person with extreme enthusiasm
+fascinate|To strongly attract interest
+fatigue|Extreme tiredness
+feasible|Possible to do
+ferocious|Savagely fierce
+fidelity|Faithfulness and loyalty
+flamboyant|Bold and showy
+flaw|A fault or weakness
+flexible|Able to bend or change easily
+fluent|Speaking smoothly and easily
+foresight|Ability to plan for the future
+forfeit|To lose something as a penalty
+formidable|Inspiring fear or respect
+fortitude|Courage in pain or difficulty
+fortunate|Lucky
+foster|To encourage growth
+fraud|Deception for unfair gain
+frenzy|Wild, uncontrolled excitement
+frivolous|Not serious; silly
+fumble|To handle clumsily
+furious|Extremely angry
+garble|To mix up and confuse
+gaudy|Too bright and showy
+genuine|Truly what it seems
+gesture|A movement that expresses an idea
+gleam|To shine brightly
+glimpse|A quick look
+gloomy|Dark or sad
+glorious|Wonderful and magnificent
+graceful|Moving in a smooth, elegant way
+gracious|Kind and courteous
+grateful|Feeling thankful
+grim|Very serious or gloomy
+grotesque|Ugly in a strange way
+grudge|Long-lasting resentment
+gullible|Easily tricked
+habitat|The natural home of a plant or animal
+harmony|Agreement or pleasant combination
+harsh|Rough, cruel or severe
+hasty|Done too quickly
+hazard|A danger or risk
+heed|To pay attention to
+heir|Someone who will inherit
+hesitate|To pause before acting
+hilarious|Extremely funny
+hoard|A secret store of valuables
+hollow|Empty inside
+honest|Truthful and sincere
+horizon|The line where earth meets sky
+hospitable|Friendly to guests
+humid|Damp and warm
+humiliate|To make someone feel ashamed
+hurdle|An obstacle to overcome
+hygiene|Practices that keep you clean and healthy
+hypocrite|Someone who doesn't practice what they preach
+ignite|To set on fire
+illuminate|To light up
+illusion|A false idea or image
+imitate|To copy
+immerse|To dip completely in liquid
+imminent|About to happen
+immune|Protected from a disease
+impair|To weaken or damage
+impeccable|Without any fault
+impede|To slow down or block
+imperative|Absolutely necessary; must be done
+impetuous|Acting quickly without thought
+implement|To put a plan into action
+imply|To suggest without saying directly
+impose|To force something on others
+impressive|Causing admiration
+improvise|To create on the spot
+inadequate|Not good enough
+incentive|Something that motivates
+incessant|Never stopping
+incident|An event or occurrence
+incite|To stir up trouble
+inclined|Likely or willing to do something
+incredible|Hard to believe
+indifferent|Not caring either way
+indignant|Angry at unfair treatment
+indulge|To allow yourself a pleasure
+industrious|Hard-working
+infamous|Well known for something bad
+infer|To conclude from evidence
+infinite|Without limits or end
+influence|The power to affect others
+ingenious|Clever and original
+inherent|Existing as a natural part
+inhibit|To hold back or restrain
+initiate|To start something off, like a plan or process
+innate|Present from birth
+innocent|Not guilty
+innovate|To introduce new ideas
+insight|Deep understanding
+insist|To demand firmly
+inspire|To fill with the urge to do something
+instinct|Natural behavior without thinking
+intact|Undamaged and complete
+intense|Very strong or extreme
+intercept|To stop something on its way
+interpret|To explain the meaning of
+intervene|To step in to change a situation
+intimidate|To frighten into doing something
+intrepid|Fearless and adventurous
+intrigue|To arouse curiosity
+intuition|Knowing without reasoning
+invade|To enter by force
+invincible|Too strong to be defeated
+irate|Very angry
+ironic|Opposite of what is expected
+irritate|To annoy
+isolate|To set apart from others
+jeopardy|Danger of loss or harm
+jubilant|Joyful and triumphant
+judicious|Showing good judgment
+justify|To show to be right
+juvenile|Young or childish
+kindle|To light a fire; to stir up
+knack|A natural skill
+labyrinth|A complicated maze
+lament|To express grief
+languid|Slow and relaxed
+lavish|Rich and generous
+legacy|Something handed down from the past
+legible|Clear enough to read
+legitimate|Lawful and genuine
+leisure|Free time
+liberate|To set free
+linger|To stay longer than needed
+literate|Able to read and write
+lofty|Very tall; noble
+lunar|Relating to the moon
+luxury|Great comfort and expense
+magnify|To make bigger
+majestic|Grand and impressive
+malice|The desire to harm others
+mandatory|Required by rules
+manipulate|To control cleverly or unfairly
+marvel|To be filled with wonder
+massive|Very large and heavy
+mature|Fully grown or developed
+mediocre|Only average; not very good
+melancholy|A deep, lasting sadness
+mellow|Soft, smooth and relaxed
+memorable|Worth remembering
+menace|A threat or danger
+merit|Worth or excellence
+migrate|To move from one place to another
+minimal|The smallest amount possible
+mischief|Playful bad behavior
+miser|Someone who hoards money
+modest|Not boastful
+moist|Slightly wet
+momentous|Very important
+monotonous|Dull and unchanging
+morale|Confidence and spirit of a group
+morbid|Interested in gloomy things
+mourn|To feel sorrow for a loss
+mutual|Shared by both sides
+myriad|A countless number
+narrate|To tell a story
+navigate|To find your way
+neglect|To fail to care for
+negotiate|To discuss to reach agreement
+neutral|Not taking sides
+noble|Having high morals
+nocturnal|Active at night
+nomad|A wanderer with no fixed home
+notable|Worth noticing
+notorious|Famous for something bad
+novel|New and original
+novice|A beginner
+nurture|To care for and help grow
+oblivious|Not aware of what is happening
+obsolete|No longer in use
+obstacle|Something that blocks progress
+obtain|To get or acquire
+occupy|To fill or take up space
+ominous|Suggesting something bad will happen
+omit|To skip or fail to include
+optimist|Someone who expects the best
+opponent|Someone you compete against
+orator|A skilled public speaker
+ordeal|A painful experience
+ornate|Highly decorated
+outrage|Strong anger and shock
+overwhelm|To overpower with emotion or force
+pandemonium|Wild disorder and noise
+paradox|A statement that seems to contradict itself
+paramount|More important than anything else
+passive|Accepting without resisting
+patience|Calmly putting up with delay
+peculiar|Strange or unusual
+penalty|A punishment for breaking a rule
+perceive|To notice or become aware of
+peril|Serious danger
+perplex|To puzzle
+persevere|To keep going despite difficulty
+persuade|To convince
+pessimist|Someone who expects the worst
+petty|Small and unimportant
+phobia|An extreme fear
+pinnacle|The highest point
+placid|Calm and peaceful
+plead|To beg earnestly
+plunder|To steal goods by force
+poignant|Deeply moving and sad
+polite|Having good manners
+ponder|To think carefully
+potent|Powerful
+precarious|Not secure; dangerous
+predict|To say what will happen
+preserve|To keep safe from harm
+prestige|Respect from achievement
+pretend|To act as if something is true
+prevail|To win or prove stronger
+prevalent|Widespread
+pristine|In perfect original condition
+probe|To investigate closely
+proclaim|To announce publicly
+procrastinate|To delay doing something
+prodigy|A young person with great talent
+profound|Very deep or intense
+prohibit|To forbid
+prolific|Producing a lot
+prominent|Important or easy to see
+prompt|Done without delay
+prophecy|A prediction of the future
+proficient|Skilled and capable
+provoke|To deliberately annoy
+punctual|On time
+puny|Small and weak
+quench|To satisfy thirst
+query|A question
+quest|A long search
+radical|Extreme or thorough
+random|Without a pattern or plan
+ravenous|Extremely hungry
+rebel|To fight against authority
+recede|To move back
+reckless|Careless about danger
+reconcile|To restore friendship
+recur|To happen again
+redeem|To make up for faults
+refine|To improve by small changes
+refuge|A place of safety
+refute|To prove wrong
+rejoice|To feel great joy
+relentless|Never stopping or easing
+relevant|Closely connected to the topic
+relish|Great enjoyment
+remedy|A cure or solution
+remorse|Deep regret
+remote|Far away
+renown|Fame
+replenish|To fill up again
+reprimand|A formal telling-off
+repulsive|Causing disgust
+resent|To feel bitter about
+reside|To live somewhere
+resolute|Firmly determined
+restrain|To hold back
+retaliate|To strike back
+retrieve|To get back
+reveal|To uncover or show something hidden
+revere|To deeply respect
+revive|To bring back to life
+rigorous|Very thorough and strict
+rival|A competitor
+rouse|To wake or stir up
+rugged|Rough and uneven
+rustic|Simple and rural
+ruthless|Without pity
+sacred|Holy or deeply respected
+sagacious|Wise
+salvage|To rescue from loss
+sanctuary|A protected place where people or animals are safe
+savage|Fierce and violent
+scant|Barely enough
+scorn|Open contempt
+seclude|To keep away from others
+sedate|Calm and unhurried
+seize|To grab suddenly
+sentiment|A feeling or opinion
+severe|Very serious or harsh
+shatter|To break into many pieces
+shun|To avoid deliberately
+significant|Important
+simulate|To imitate
+sincere|Genuine and honest
+skeptic|Someone who doubts
+slander|False spoken statements that harm
+sluggish|Slow-moving
+smug|Too pleased with oneself
+snare|A trap
+soar|To fly high
+sober|Serious and sensible
+solemn|Serious and dignified
+solace|Comfort in sadness
+somber|Dark and gloomy
+soothe|To calm or ease
+sparse|Thinly scattered
+spontaneous|Done on impulse
+squander|To waste
+stable|Firm and steady
+stamina|Lasting energy
+startle|To surprise suddenly
+steadfast|Firm and loyal
+stern|Strict and serious
+stifle|To hold back or suffocate
+stimulate|To excite or encourage
+strenuous|Requiring great effort
+strive|To try very hard
+stubborn|Unwilling to change
+stun|To shock or amaze
+sturdy|Strong and solid
+submerge|To put under water
+subsequent|Coming after
+substantial|Large in size or importance
+summit|The top of a mountain
+superb|Excellent
+supreme|Highest in rank
+surpass|To do better than
+surplus|More than needed
+susceptible|Easily affected
+swift|Very fast
+symbolize|To stand for
+sympathy|Feeling sorry for someone
+tactful|Careful not to offend
+tactic|A planned action to achieve something
+tarnish|To spoil or stain
+taunt|To mock or tease
+temperament|A person's nature
+tempest|A violent storm
+temporary|Lasting a short time
+tenacity|Firm determination
+tense|Stretched tight; nervous
+terminate|To stop something completely, like a contract
+terrain|A stretch of land
+testify|To give evidence
+thorough|Complete and careful
+thrifty|Careful with money
+thwart|To prevent from succeeding
+tolerate|To put up with
+torment|Severe suffering
+toxic|Poisonous
+tradition|A custom passed down
+tragic|Very sad
+traitor|Someone who betrays
+transform|To change completely
+transparent|Easy to see through
+treacherous|Dangerous; disloyal
+tremendous|Very great
+trepidation|Fear about what may happen
+triumph|A great victory
+tumult|Loud confusion
+turbulent|Wild and disordered
+tyrant|A cruel ruler
+unbiased|Fair and neutral
+uncanny|Strange and mysterious
+undermine|To weaken gradually
+unique|One of a kind
+unruly|Hard to control
+uphold|To support or maintain
+urban|Relating to a city
+urgent|Needing quick action
+utilize|To make use of
+utmost|Greatest
+vacant|Empty
+valid|Logically sound
+vanish|To disappear suddenly
+vast|Huge in area
+vengeance|Punishment in return for harm
+venture|A risky undertaking
+verdict|A decision in a trial
+versatile|Able to do many things
+vicious|Cruel and violent
+victorious|Having won
+vigor|Physical strength and energy
+villain|A wicked character
+vindicate|To clear of blame
+virtue|Moral goodness
+vital|Absolutely necessary
+vocal|Expressing opinions loudly
+vulnerable|Easily hurt
+wander|To walk without a goal
+wane|To decrease gradually
+weary|Very tired
+whimsical|Playful and fanciful
+wicked|Evil
+wilt|To droop
+wince|To flinch in pain
+witty|Clever and funny
+wrath|Extreme anger
+yearn|To long for
+yield|To give way; to produce
+zeal|Great enthusiasm
+zenith|The peak of success or power
 </script>
 <script>
 (()=>{
 const RAW=document.getElementById('words').textContent;
 const BANK=RAW.trim().split('\n').map(l=>{const i=l.indexOf('|');return{w:l.slice(0,i).toUpperCase(),m:l.slice(i+1)}});
-const N=BANK.length,ROUND_MS=45000,RESULT_MS=3000,ALPHA='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',MAXP=6;
+const N=BANK.length,ROUND_MS=45000,RESULT_MS=3000,ALPHA='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',MAXP=10;
 /* ---------- live connection: free public MQTT relays, no accounts ---------- */
-const APP='scrambleduel-mp1';
+const APP='scrambleduel-mp2';
 const BROKERS=['wss://broker.emqx.io:8084/mqtt','wss://broker.hivemq.com:8884/mqtt','wss://test.mosquitto.org:8081/mqtt'];
 const LIBS=['https://cdnjs.cloudflare.com/ajax/libs/mqtt/5.10.1/mqtt.min.js','https://cdn.jsdelivr.net/npm/mqtt@5.10.1/dist/mqtt.min.js','https://unpkg.com/mqtt@5.10.1/dist/mqtt.min.js'];
 const ID_RE=/^[a-z0-9]{6,16}$/;
@@ -246,7 +936,7 @@ function rid(n){const a='abcdefghijkmnpqrstuvwxyz23456789';let s='';const r=cryp
 const ME=(()=>{const v=SS.get('sd_id');if(typeof v==='string'&&ID_RE.test(v))return v;const n=rid(10);SS.set('sd_id',n);return n})();
 
 let lib=null,libState='loading',net=null,netUp=false;
-let solo=false,isHost=false,S=null,screen='home',myName=(typeof LS.get('sd_name')==='string'?LS.get('sd_name'):''),code='',homeMsg='';
+let solo=false,isHost=false,S=null,screen='intro',myName=(typeof LS.get('sd_name')==='string'?LS.get('sd_name'):''),code='',homeMsg='';
 let picks=[],tiles=[],lastKey='',deadline=0,locked=false,fb='',fbc='';
 let hostGone=false,lastStateAt=0,lastRenderKey='',joinT=null,loopT=null;
 /* host-only */
@@ -260,12 +950,29 @@ function rng(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t
 function shuf(arr,r){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function clean(s){return typeof s==='string'?s.replace(/[\u0000-\u001f\u007f<>&"]/g,'').trim().slice(0,14):''}
 function h(t,a,...c){const e=document.createElement(t);for(const k in a||{}){const v=a[k];if(k==='class')e.className=v;else if(k.slice(0,2)==='on')e.addEventListener(k.slice(2),v);else if(v===true)e.setAttribute(k,'');else if(v!==false&&v!=null)e.setAttribute(k,v)}for(const x of c.flat())if(x!=null&&x!==false)e.append(x.nodeType?x:document.createTextNode(x));return e}
-function show(...n){app.replaceChildren(...n.filter(x=>x!=null&&x!==false))}
-let ordSeed='',ord=[];
-function wordIdx(r){if(ordSeed!==S.seed){ordSeed=S.seed;ord=shuf([...Array(N).keys()],rng(hash(S.seed)))}return ord[(S.off+r)%N]}
+let viewKey='',lastView='';
+function show(...n){
+ app.replaceChildren(...n.filter(x=>x!=null&&x!==false));
+ if(viewKey!==lastView){lastView=viewKey;app.classList.remove('enter');void app.offsetWidth;app.classList.add('enter')}
+}
+function wordIdx(r){return S.deck[r]}
+/* ---------- fresh words: every device remembers which words it has already played ---------- */
+const SEEN_KEY='sd_seen';
+function seenMap(){const m=LS.get(SEEN_KEY);return m&&typeof m==='object'&&!Array.isArray(m)?m:{}}
+function markSeen(idxs){const m=seenMap(),now=Date.now();let ch=false;for(const i of idxs){const b=BANK[i];if(b&&!m[b.w]){m[b.w]=now;ch=true}}if(ch)LS.set(SEEN_KEY,m)}
+function mySeenIdx(){const m=seenMap(),out=[];BANK.forEach((b,i)=>{if(m[b.w])out.push(i)});return out}
+let peerSeen={};
+/* pick words nobody in the room has seen; if everyone has seen everything, use the ones seen longest ago */
+function buildDeck(total){
+ const cnt=new Array(N).fill(0);const add=a=>{for(const i of a)if(Number.isInteger(i)&&i>=0&&i<N)cnt[i]++};
+ add(mySeenIdx());
+ if(S&&!solo)for(const p of S.players)if(p.id!==ME&&p.on&&peerSeen[p.id])add(peerSeen[p.id]);
+ const m=seenMap();
+ return [...Array(N).keys()].map(i=>[i,cnt[i],m[BANK[i].w]||0,Math.random()]).sort((a,b)=>a[1]-b[1]||a[2]-b[2]||a[3]-b[3]).slice(0,total).map(x=>x[0]);
+}
 /* every player gets their own letter order: distinct permutations from the round seed, picked by colour slot */
 function scrFor(word,slot){
- const r=rng(hash(S.seed+':'+(S.off+S.round)));const seen=new Set([word]);const list=[];let t=0;
+ const r=rng(hash(S.seed+':'+S.round));const seen=new Set([word]);const list=[];let t=0;
  while(list.length<=slot&&t<500){t++;const a=shuf(word.split(''),r).join('');if(!seen.has(a)){seen.add(a);list.push(a)}}
  return (list[slot]||list[list.length-1]||word.split('').reverse().join('')).split('');
 }
@@ -346,8 +1053,9 @@ function finish(who){
 }
 function next(){if(!S)return;if(S.round+1>=S.total){S.phase='final';clearTimeout(gt);bcast()}else{S.round++;startRound()}}
 function startGame(again){
- if(again)S.off+=S.total;
+ if(again)S.off++;
  S.players=S.players.filter(p=>p.on);S.players.forEach(p=>p.score=0);
+ S.seed=rid(8);S.deck=buildDeck(S.total);
  S.round=0;S.log=[];S.paused=false;startRound();
 }
 function pause(){if(S.paused)return;pausedLeft=Math.max(0,endsAt-Date.now());S.paused=true;clearTimeout(gt)}
@@ -371,6 +1079,7 @@ function onUp(env){
  let p=pById(id);
  if(env.t==='hello'){
   const name=clean(d.name)||'Friend';
+  if(Array.isArray(d.seen))peerSeen[id]=d.seen.slice(0,N).filter(i=>Number.isInteger(i)&&i>=0&&i<N);
   if(p){p.name=name;p.on=true;lastSeen[id]=now}
   else{
    if(S.players.length>=MAXP){net.pub('d','full',{to:id});return}
@@ -400,12 +1109,13 @@ function hostLoop(){
 }
 
 /* ---------- player (non-host) ---------- */
-function sendHello(){if(net)net.pub('u','hello',{name:myName})}
+function sendHello(){if(net)net.pub('u','hello',{name:myName,seen:mySeenIdx()})}
 function okState(d){
  if(!d||typeof d!=='object')return null;
  const I=(v,a,b)=>Number.isInteger(v)&&v>=a&&v<=b;
- if(d.v!==2||d.code!==code||typeof d.host!=='string'||!ID_RE.test(d.host))return null;
+ if(d.v!==3||d.code!==code||typeof d.host!=='string'||!ID_RE.test(d.host))return null;
  if(typeof d.seed!=='string'||!/^[a-z0-9]{1,12}$/.test(d.seed))return null;
+ if(!Array.isArray(d.deck)||d.deck.length>20||(d.phase!=='lobby'&&d.deck.length!==d.total)||!d.deck.every(i=>I(i,0,N-1))||new Set(d.deck).size!==d.deck.length)return null;
  if(!I(d.off,0,100000)||![10,15,20].includes(d.total)||!I(d.round,0,d.total-1)||!I(d.rs,0,1e6)||!I(d.seq,0,1e9)||!I(d.left,0,ROUND_MS)||!['lobby','play','result','final'].includes(d.phase))return null;
  if(!Array.isArray(d.players)||d.players.length<1||d.players.length>MAXP)return null;
  const players=[],ids=new Set();
@@ -416,7 +1126,7 @@ function okState(d){
  if(!Array.isArray(d.log)||d.log.length>20)return null;
  const log=[];for(const e of d.log){if(!Array.isArray(e)||!I(e[0],0,N-1)||typeof e[1]!=='string'||!(e[1]==='n'||ids.has(e[1])||ID_RE.test(e[1])))return null;log.push([e[0],e[1]])}
  const result=d.result==='n'||(typeof d.result==='string'&&ID_RE.test(d.result))?d.result:null;
- return{v:2,code:d.code,host:d.host,seed:d.seed,off:d.off,total:d.total,round:d.round,rs:d.rs,seq:d.seq,left:d.left,phase:d.phase,paused:d.paused===true,players,result,log};
+ return{v:3,code:d.code,host:d.host,seed:d.seed,off:d.off,deck:d.deck.slice(),total:d.total,round:d.round,rs:d.rs,seq:d.seq,left:d.left,phase:d.phase,paused:d.paused===true,players,result,log};
 }
 function onState(env){
  const s=okState(env.d);if(!s||s.host!==env.f)return;
@@ -429,11 +1139,11 @@ function onState(env){
   if(S&&S.host===s.host){S=s;}
   return;
  }
- const prevKey=S?S.seed+':'+S.off+':'+S.round+':'+S.rs:'';
+ const prevKey=S?S.seed+':'+S.round+':'+S.rs:'';
  S=s;
  if(s.phase==='play'&&!s.paused){
   const nd=Date.now()+s.left;
-  if(prevKey!==s.seed+':'+s.off+':'+s.round+':'+s.rs||Math.abs(nd-deadline)>1500)deadline=nd;
+  if(prevKey!==s.seed+':'+s.round+':'+s.rs||Math.abs(nd-deadline)>1500)deadline=nd;
  }
  clearInterval(joinT);joinT=null;
  const k=JSON.stringify(Object.assign({},s,{seq:0,left:0}));
@@ -455,7 +1165,7 @@ function playerLoop(){
 }
 
 /* ---------- start / join / leave ---------- */
-function newState(c){return{v:2,code:c,host:ME,seed:rid(8),off:0,total:10,round:0,rs:0,seq:0,left:0,phase:'lobby',paused:false,players:[{id:ME,name:myName,score:0,on:true,c:0}],result:null,log:[]}}
+function newState(c){return{v:3,code:c,host:ME,seed:rid(8),off:0,deck:[],total:10,round:0,rs:0,seq:0,left:0,phase:'lobby',paused:false,players:[{id:ME,name:myName,score:0,on:true,c:0}],result:null,log:[]}}
 async function createGame(){
  let c='';const r=crypto.getRandomValues(new Uint8Array(5));for(const x of r)c+=ALPHA[x%ALPHA.length];
  code=c;isHost=true;solo=false;S=newState(c);screen='game';lastSeen={};render();
@@ -496,6 +1206,45 @@ function leave(m){
 }
 
 /* ---------- screens ---------- */
+/* ---------- theme + top bar ---------- */
+function curTheme(){return document.documentElement.getAttribute('data-theme')==='dark'?'dark':'light'}
+function setTheme(t){
+ document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('sd_theme',t)}catch(e){}
+ const m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',t==='dark'?'#0f1618':'#f5f2ec');
+ buildTop();
+}
+function buildTop(){
+ const top=document.getElementById('top');if(!top)return;
+ const t=curTheme();
+ const b=(v,l)=>h('button',{'aria-pressed':String(t===v),onclick:()=>setTheme(v)},l);
+ top.replaceChildren(h('span',{class:'brand'},'Taspear’s Creation'),h('div',{class:'theme',role:'group','aria-label':'Theme'},b('light','☀ Light'),b('dark','☾ Dark')));
+}
+/* ---------- opening page ---------- */
+function buildIntro(){
+ const lines=['TASPEAR’S','CREATION'];
+ const title=h('div',{class:'title','aria-label':'Taspear’s Creation',role:'img'},lines.map(w=>h('div',{class:'ln'},w.split('').map(ch=>h('span',{class:'t'+(ch==='’'?' ap':'')},ch)))));
+ const go=h('button',{id:'bstart',onclick:()=>{screen='home';render()}},inviteCode?'Join game '+inviteCode:'Let’s play');
+ show(h('div',{class:'intro'},
+  h('div',{class:'eyebrow'},'A word game by'),
+  title,
+  h('div',{class:'presents'},'presents'),
+  h('div',{class:'gname'},'Scramble Duel'),
+  h('div',{class:'how'},h('div',null,h('b',null,'1'),'Read the clue'),h('div',null,h('b',null,'2'),'Tap the letters'),h('div',null,h('b',null,'3'),'Be first to spell it')),
+  go,
+  h('div',{class:'fine'},'Up to '+MAXP+' players · Just share the link · No sign-up')));
+ // letters start scrambled, then glide into place
+ if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
+  requestAnimationFrame(()=>{
+   document.querySelectorAll('.title .ln').forEach((ln,li)=>{
+    const ts=[...ln.children];const pos=ts.map(t=>t.offsetLeft);
+    const order=shuf(ts.map((_,i)=>i),rng(hash('taspear'+li+Date.now())));
+    ts.forEach((t,i)=>{t.style.transition='none';t.style.transform='translateX('+(pos[order[i]]-pos[i])+'px) rotate('+((i%2?1:-1)*6)+'deg)'});
+    void ln.offsetWidth;
+    setTimeout(()=>ts.forEach((t,i)=>{t.style.transition='';t.style.transitionDelay=(i*55)+'ms';t.style.transform=''}),350);
+   });
+  });
+ }
+}
 function statusLine(){return h('p',{id:'netst',class:'status'+(netUp?'':' off')},h('i'),netUp?' Connected':' Connecting…')}
 function buildHome(){
  const ok=libState==='ok';
@@ -549,51 +1298,53 @@ function buildLobby(){
  const url=inviteUrl();
  const slots=S.players.map(playerSlot);
  if(S.players.length<MAXP)slots.push(h('div',{class:'slot'},h('span',{class:'dot'}),h('span',{class:'note'},S.players.length<2?'Waiting for friends to join…':'Room for '+(MAXP-S.players.length)+' more')));
- show(h('h2',null,'Your game'),h('p',{class:'sub'},'Send your friends the link (or the code). Up to '+MAXP+' players.'),
+ show(overlay(),h('h2',null,'Your game'),h('p',{class:'sub'},'Send your friends the link (or the code). Up to '+MAXP+' players.'),
   statusLine(),
   h('div',{class:'card gap'},h('div',{class:'big','aria-label':'Game code '+S.code.split('').join(' ')},S.code),
    h('div',{class:'link'},url),
    h('div',{class:'row2'},copyBtn('Copy invite link',inviteUrl),copyBtn('Copy code',()=>S.code))),
   h('div',{class:'card'},h('label',null,'Players ('+S.players.length+' of '+MAXP+')'),slots),
-  host?h('div',{class:'card'},h('label',null,'Words per game'),h('div',{class:'row'},[10,15,20].map(n=>h('button',{class:'sec','aria-pressed':String(S.total===n),onclick:()=>{S.total=n;bcast()}},String(n))))):h('p',{class:'note'},'Waiting for the host to start. '+S.total+' words this game.'),
-  host?h('button',{disabled:online<2,onclick:()=>startGame(false)},online<2?'Waiting for friends…':'Start game with '+online+' players'):null,
-  h('p',null),h('button',{class:'sec',onclick:()=>leave()},host?'Close game':'Leave game'));
+  host?h('div',{class:'card'},h('label',null,'Words per game'),h('div',{class:'row seg'},[10,15,20].map(n=>h('button',{class:'sec','aria-pressed':String(S.total===n),onclick:()=>{S.total=n;bcast()}},String(n))))):h('p',{class:'note'},'Waiting for the host to start. '+S.total+' words this game.'),
+  host?h('button',{disabled:online<2,onclick:()=>startGame(false)},online<2?'Waiting for friends…':'Start game with '+online+' players'):null);
 }
+let prevScores={};
 function scoreCards(){
  const ps=S.players.slice().sort((a,b)=>(b.id===ME)-(a.id===ME));
- return h('div',{class:'scores'},ps.map(p=>h('div',{class:'sc '+cls(p)+(p.on?'':' away')},h('span',null,p.name+(p.id===ME?' (you)':'')),h('b',null,String(p.score)))));
+ const el=h('div',{class:'scores'},ps.map(p=>{const up=prevScores[p.id]!=null&&p.score>prevScores[p.id];return h('div',{class:'sc '+cls(p)+(p.on?'':' away')+(up?' bump':'')},h('span',null,p.name+(p.id===ME?' (you)':'')),h('b',null,String(p.score)))}));
+ prevScores={};ps.forEach(p=>prevScores[p.id]=p.score);
+ return el;
 }
 function overlay(){
  if(solo)return null;
- let t='';
- if(hostGone)t='Lost contact with the host. Waiting for them to come back…';
- else if(S.paused)t='Not enough players online, so the game is paused until someone comes back.';
- return t?h('div',{class:'over',role:'status'},t):null;
+ if(hostGone)return h('div',{class:'over',role:'status'},'Lost contact with the host. Waiting for them to come back…',h('button',{class:'sec',onclick:()=>leave()},'Back to start'));
+ if(S.paused)return h('div',{class:'over',role:'status'},'Not enough players online, so the game is paused until someone comes back.');
+ return null;
 }
 function buildPlay(){
+ markSeen([wordIdx(S.round)]);
  const word=BANK[wordIdx(S.round)];
- const key=S.seed+':'+S.off+':'+S.round+':'+S.rs;
+ const key=S.seed+':'+S.round+':'+S.rs;
  const mp=meP();
  if(S.phase==='play'&&key!==lastKey){lastKey=key;picks=[];locked=false;fb='';fbc='';tiles=scrFor(word.w,mp?mp.c:0)}
  const kids=[overlay(),solo?null:statusLine(),scoreCards(),h('div',{class:'meta'},h('span',null,'Word '+(S.round+1)+' of '+S.total),h('span',{id:'secs'},'')),h('div',{class:'bar'},h('i',{id:'bar'}))];
  if(S.phase==='play'){
   kids.push(h('div',{class:'card'},h('div',{class:'note'},word.w.length+' letters'),h('div',{class:'clue'},word.m)));
-  kids.push(h('div',{class:'slots',id:'slots','aria-label':'Your answer'},word.w.split('').map(()=>h('div',{class:'box'}))));
+  kids.push(h('div',{class:'slots',id:'slots','aria-label':'Your answer. Tap a letter to take it out.'},word.w.split('').map((_,i)=>h('button',{class:'box',onclick:()=>unpick(i)}))));
   kids.push(h('div',{class:'tiles',id:'tiles'},tiles.map((l,i)=>h('button',{class:'tile','aria-label':'Letter '+l,onclick:()=>pick(i)},l))));
   kids.push(h('div',{class:'row2'},h('button',{class:'sec',onclick:()=>{if(locked)return;tiles=shuf(tiles,Math.random);if(tiles.join('')===word.w)tiles.reverse();picks=[];upd()}},'Shuffle'),h('button',{class:'sec',onclick:()=>{if(locked)return;picks=[];upd()}},'Clear')));
   kids.push(h('div',{class:'fb '+fbc,id:'fb','aria-live':'polite'},fb));
+  kids.push(h('p',{class:'hint'},'Tip: tap a letter in your answer to send it back.'));
  }else{
   const r=S.result,mine=r===ME,none=r==='n'||!r,wp=pById(r);
   kids.push(h('div',{class:'card banner '+(none?'':cls(wp)||'p0')},h('h2',null,none?'Time is up':mine?'You got it first':nameOf(r)+' got it first'),h('div',{class:'w'},word.w),h('div',null,word.m)));
  }
- kids.push(h('p',null),h('button',{class:'sec',onclick:()=>leave()},isHost&&!solo?'End game for everyone':'Leave game'));
  show(...kids);upd();tick();
 }
 function blocked(){return !S||S.phase!=='play'||locked||(!solo&&(S.paused||hostGone))}
 function upd(){
  const word=S&&S.phase==='play'?BANK[wordIdx(S.round)]:null;if(!word)return;
  const sl=document.getElementById('slots'),tl=document.getElementById('tiles');if(!sl||!tl)return;
- [...sl.children].forEach((b,i)=>{const l=picks[i]!=null?tiles[picks[i]]:'';b.textContent=l;b.className='box'+(l?' on':'')});
+ [...sl.children].forEach((b,i)=>{const l=picks[i]!=null?tiles[picks[i]]:'';const was=b.textContent;b.textContent=l;b.className='box'+(l?' on':'')+(l&&l!==was?' pop':'');b.setAttribute('aria-label',l?'Remove letter '+l:'Empty');b.disabled=!l||locked||(!solo&&(S.paused||hostGone))});
  const bl=blocked();
  [...tl.children].forEach((b,i)=>{b.textContent=tiles[i];b.setAttribute('aria-label','Letter '+tiles[i]);b.disabled=picks.includes(i)||bl});
  const f=document.getElementById('fb');if(f){f.textContent=fb;f.className='fb '+fbc}
@@ -607,11 +1358,15 @@ function pick(i){
    if(isHost)finish(ME);else{net&&net.pub('u','solve',{round:S.round,rs:S.rs});fb='Got it! Checking who was first…'}
    upd();
   }else{
-   fb='Not that one. Try again.';fbc='bad';const sl=document.getElementById('slots');
+   fb='Not that one. Tap a letter to fix it.';fbc='bad';const sl=document.getElementById('slots');
    if(sl){sl.classList.remove('shake');void sl.offsetWidth;sl.classList.add('shake')}
-   setTimeout(()=>{picks=[];upd()},450);upd();
+   upd();
   }
  }else{fb='';fbc='';upd()}
+}
+function unpick(i){
+ if(blocked()||i<0||i>=picks.length)return;
+ picks.splice(i,1);fb='';fbc='';upd();
 }
 function buildFinal(){
  const ranked=S.players.slice().sort((a,b)=>b.score-a.score);
@@ -623,13 +1378,14 @@ function buildFinal(){
  else title=leaders[0].id===ME?'You win!':leaders[0].name+' wins';
  const rank=solo?null:h('div',{class:'card'},h('label',null,'Final scores'),h('ol',{class:'rank'},ranked.map((p,i)=>h('li',{class:cls(p)},h('span',{class:'dot'}),h('b',null,(i+1)+'. '+p.name+(p.id===ME?' (you)':'')),h('span',{class:'pts'},String(p.score))))));
  const rec=S.log.map(([i,w])=>{const p=pById(w);const who=w==='n'?'Nobody':w===ME?'You':(p?p.name:'Someone');return h('li',null,h('span',null,BANK[i].w.toLowerCase()),h('span',{class:'tag '+(w==='n'?'':cls(p))},who))});
- show(h('div',{class:'card banner'},h('h2',null,title),h('p',{class:'note'},solo?'Nice practice run.':S.total+' words played.')),
+ show(overlay(),h('div',{class:'card banner'},h('h2',null,title),h('p',{class:'note'},solo?'Nice practice run.':S.total+' words played.')),
   rank,
   h('div',{class:'card'},h('label',null,'Recap'),h('ul',{class:'rec'},rec)),
-  isHost?h('button',{disabled:!solo&&onlineCount()<2,onclick:()=>startGame(true)},'Play again (new words)'):h('p',{class:'note'},'Waiting for the host to start another game.'),
-  h('p',null),h('button',{class:'sec',onclick:()=>leave()},'Leave game'));
+  isHost?h('button',{disabled:!solo&&onlineCount()<2,onclick:()=>startGame(true)},'Play again (new words)'):h('p',{class:'note'},'Waiting for the host to start another game.'));
 }
 function render(){
+ viewKey=screen+(S?':'+S.phase+':'+S.round+':'+S.rs:'');
+ if(screen==='intro'){buildIntro();return}
  if(screen==='home'){buildHome();return}
  if(!S||!meP()){show(h('h2',null,'Joining…'),h('p',{class:'sub'},'Looking for game '+code+'.'),statusLine(),h('button',{class:'sec',onclick:()=>leave()},'Cancel'));return}
  if(S.phase==='lobby')buildLobby();else if(S.phase==='final')buildFinal();else buildPlay();
@@ -642,6 +1398,7 @@ function tick(){
  if(!solo&&(S.paused||hostGone))left=isHost?pausedLeft:S.left;
  else left=Math.max(0,(isHost?endsAt:deadline)-Date.now());
  b.style.width=(left/ROUND_MS*100)+'%';if(s)s.textContent=Math.ceil(left/1000)+'s';
+ const bw=b.parentNode;if(bw){bw.classList.toggle('mid',left<=15000&&left>7000);bw.classList.toggle('low',left<=7000)}
 }
 setInterval(tick,200);
 setInterval(()=>{if(isHost)hostLoop();else playerLoop();netStatus()},1000);
@@ -674,6 +1431,7 @@ function afterLib(){
  const sj=SS.get('sd_join');
  if(sj&&typeof sj.code==='string'&&/^[A-Z0-9]{5}$/.test(sj.code)){myName=clean(sj.name)||myName||'Player';joinGame(sj.code)}
 }
+buildTop();
 render();
 loadLib(0);
 })();
