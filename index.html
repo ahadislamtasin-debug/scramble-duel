@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Scramble Duel · Taspear's Creation</title>
-<meta name="description" content="Taspear's Creation presents Scramble Duel. Unscramble the word from its meaning. Play with up to 10 friends — just share the link.">
+<title>Scramble Duel · Taspear Creation</title>
+<meta name="description" content="Taspear Creation presents Scramble Duel. Unscramble the word from its meaning. Play with up to 10 friends — just share the link.">
 <meta name="theme-color" content="#f5f2ec">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
@@ -1217,12 +1217,12 @@ function buildTop(){
  const top=document.getElementById('top');if(!top)return;
  const t=curTheme();
  const b=(v,l)=>h('button',{'aria-pressed':String(t===v),onclick:()=>setTheme(v)},l);
- top.replaceChildren(h('span',{class:'brand'},'Taspear’s Creation'),h('div',{class:'theme',role:'group','aria-label':'Theme'},b('light','☀ Light'),b('dark','☾ Dark')));
+ top.replaceChildren(h('span',{class:'brand'},'Taspear Creation'),h('div',{class:'theme',role:'group','aria-label':'Theme'},b('light','☀ Light'),b('dark','☾ Dark')));
 }
 /* ---------- opening page ---------- */
 function buildIntro(){
- const lines=['TASPEAR’S','CREATION'];
- const title=h('div',{class:'title','aria-label':'Taspear’s Creation',role:'img'},lines.map(w=>h('div',{class:'ln'},w.split('').map(ch=>h('span',{class:'t'+(ch==='’'?' ap':'')},ch)))));
+ const lines=['TASPEAR','CREATION'];
+ const title=h('div',{class:'title','aria-label':'Taspear Creation',role:'img'},lines.map(w=>h('div',{class:'ln'},w.split('').map(ch=>h('span',{class:'t'+(ch==='’'?' ap':'')},ch)))));
  const go=h('button',{id:'bstart',onclick:()=>{screen='home';render()}},inviteCode?'Join game '+inviteCode:'Let’s play');
  show(h('div',{class:'intro'},
   h('div',{class:'eyebrow'},'A word game by'),
@@ -1358,9 +1358,10 @@ function pick(i){
    if(isHost)finish(ME);else{net&&net.pub('u','solve',{round:S.round,rs:S.rs});fb='Got it! Checking who was first…'}
    upd();
   }else{
-   fb='Not that one. Tap a letter to fix it.';fbc='bad';const sl=document.getElementById('slots');
+   fb='Not that one. Try again.';fbc='bad';const sl=document.getElementById('slots');
    if(sl){sl.classList.remove('shake');void sl.offsetWidth;sl.classList.add('shake')}
-   upd();
+   const k=lastKey;locked=true;upd();
+   setTimeout(()=>{if(lastKey!==k)return;picks=[];locked=false;upd()},550);
   }
  }else{fb='';fbc='';upd()}
 }
